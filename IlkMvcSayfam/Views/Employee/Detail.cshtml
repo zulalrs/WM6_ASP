@@ -1,0 +1,43 @@
+﻿@model Employee
+@{
+    ViewBag.Title = "Detail";
+}
+
+<h2>@Model.FirstName @Model.LastName satis sayfasi</h2>
+@if (Model.Orders.Any())
+{
+    <table class="table table-responsive table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>OrderId</th>
+                <th>Order Date</th>
+                <th>Required Date</th>
+                <th>Freight</th>
+                <th>Detail</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Orders.Count; i++)
+            {
+                var current = Model.Orders.ToList()[i];
+                <tr>
+                    <th>@(i + 1)</th>
+                    <td>@current.OrderID</td>
+                    <td>@($"{current.OrderDate:dd/MM/yyyy}")</td>
+                    <td>@($"{current.RequiredDate:dd/MM/yyyy}")</td>
+                    <td>@($"{current.Freight:c2}")</td>
+                    <td>
+                        <a href="@Url.Action("Detail", "Order", new { id = current.OrderID })" class="btn btn-success">Detail</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h3 class="text-danger">Çalışana kayitli bir sipariş bulunmamaktadir</h3>
+}
+
+

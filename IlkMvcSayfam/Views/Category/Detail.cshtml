@@ -1,0 +1,44 @@
+﻿@model Category
+@{
+    /**/
+
+    ViewBag.Title = "Detail";
+}
+<!--Kategori tipinde bir nesne geliyor-->
+<h2>@Model.CategoryName nin detay sayfasi</h2>  <!--Buraya başlık tanımladık.-->
+<h4>@Model.Description</h4> <!--Kategori açıklaması için başlık-->
+@if (Model.Products.Any()) // Ürünü olan kategori için aşagıdaki işlemleri yapsın
+{
+    <table class="table table-responsive table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Product Name</th>
+                <th>Unit Price</th>
+                <th>Units in Stock</th>
+                <th>Detail</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Products.Count; i++) // Kategorilerin productlarını geziyoruz.
+            {
+                var current = Model.Products.ToList()[i];   // Product ICollection tipinde oldugu için [i] elemanını alamadık onun için Tolist kullandık.
+                <tr>
+                    <th>@(i + 1)</th>
+                    <td>@current.ProductName</td>
+                    <td>@($"{current.UnitPrice:c2}")</td>
+                    <td>@current.UnitsInStock</td>
+                    <td>
+                        <a href="@Url.Action("Detail", "Product", new {id = current.ProductID})" class="btn btn-success">
+                            Detail
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else    // Ürünü olmayan kategoriler için burası çalışacak.
+{
+    <h3 class="text-danger">Kategoriye kayitli bir urun bulunmamaktadir.</h3> <!--text-danger yazıyı kırmızı renkli gösterecek-->
+}

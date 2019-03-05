@@ -1,0 +1,14 @@
+﻿@model List<Kuzey.Models.ViewModels.CategoryViewModel>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>@Model.Count</h2>
+
+@using (Html.BeginForm("Add", "Category", FormMethod.Post)) <!-- Gilen degerleri Add action metoduna yolluyor.s-->
+{
+    @Html.TextBox("CategoryName")
+    @Html.TextBox("Description")
+    <input type="submit" value="Ekle"/>
+}
+

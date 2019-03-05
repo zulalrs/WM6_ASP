@@ -1,0 +1,113 @@
+1) Proje ve Tema adýnda iki kalsor oluþturduk.
+2) Tema klasöründe yeni bir asp.net projesi açtýk. Empty olaný seçtik.
+3) Kullanacaðýmýz temanýn dosyalarýný bu projeye sürükle býrak þeklinde yükledik.
+4) Proje klasöründe yeni bir asp.net projesi açtýk. Empty+Mvc seçtik.
+5) View Klasörü altýna Shared klasoru ekledik.
+6) Shared klasoru içerisine LayoutMain adlý layoutu ekledik.
+7) Temamýz içerisinde yer alan assets klasorunu admin.web.ui projesi içerisine aþaðýdan yukarý taþýyoruz._LayoutMain e kullandýðýmýz temadaki blank view in içerisindeki html kodlarýnýn tümünü kopyalayýp yapýþtýrýyoruz.
+8) RenderBody kýsmýný belirliyoruz.
+9) Body içerisindeki bazý kýsýmlarý Partiallara ayýrýyoruz ve her bir partialview i shared klasoru altýna partial klasoru açarak orada topluyoruz. Ve onlarýn partiaviewresultlarýný controllera açtýðýmýz patialcontrollerý içerisine yazýyoruz. assets ile baþlayan pathlerin önüne ~iþareti koyuyoruz.
+10) Layoutta iþimiz bittikten sonra HomeController oluþturduk.
+11) Index actionresult ý için sað týklayýp Index view ý oluþturduk orada hazýrladýðýmýz layout u View/Shared klasorleri altýnda bulup seçtik ve tamama týkladýk.
+12) BLL,Models ve Dal class library lerini oluþturduk, ui dahil hepsine entity framework kurduk ve referanslarý verdik.
+BLL -> DAL,Models
+DAL -> Models
+UI -> BLL,Models
+
+13) Klasorler
+BLL-> Helpers, Identity, Repository, Services, Settings
+Models-> Abstracts, Entities, Enums, IdentityModels, Models, ViewModels
+14) BaseEntity ve BaseEntity2 classlarýný abstract klasoru içerisinde oluþturduk.
+15) Category poco classýmýzý oluþturduk.
+16) Mycontext içerisinde, taxRatein  basamak uzunluðu için fluent validation yazdýk.
+17) Mvc sayfasýndaki büyük WebConfig içerisine connectionstrings ifademizi yazýyoruz.
+
+Not: Küçük webconfig içerisinden viewlarýmýzý yönetiyoruz. Büyük Webconfigte ise direk projemizi yonetiyoruz.
+18) Product poco classýmýzý oluþturduk.
+19) ProductTypes enum sýnýfýný oluþturduk.
+20) Mycontext içerisinde, productta ait decimal tiplerin basamak uzunluðu için fluent validation yazdýk.
+21) Order poco classýmýzý oluþturduk.
+22) OrderTypes enum sýnýfýný oluþturduk.
+23) Invoice computed poco classýný oluþturduk.
+24) Mycontext içerisinde, Invoice e ait decimal tiplerin basamak uzunluðu için fluent validation yazdýk.
+27) MyContext içerisine tüm poco classlarýmýzý ekledik ve package manager console dan enable-migrations ý otomatik migration true olacak þekilde kurduk ve update database yaptýk.
+
+28) BLL içerisine repositorybase classlarýmýzý ve tablolarýmýza ait repolarýmýzý oluþturduk.
+29) StringHelpers sýnýfýný oluþturduk.
+30) EntityHelpers sýnýfýný oluþturduk.
+31) EnumHelpers sýnýfýný oluþturduk.
+32) BaseController ý oluþturduk ve içerisine kategorileri getiren metodu yazdýk. CategoryControllerýný da bu controllerdan kalýtým aldýrdýk.
+34) CategoryController a Add get metodunu yazdýk ve view ý oluþturduk. Add viewýnda düzenlemeler yaptýk.
+34) CategoryController a Add Post metodunu yazdýk
+35) Hata sayfasýný oluþturduk.
+-HomeController içine Error Actionresult metodunu oluþturduk.
+-ErrorViewModel oluþturduk.
+-Error view html sayfasýný oluþturduk
+-Gerekli düzenlemeleri yaptýk.
+36) CategoryController a Update get ve post metodlarýný yazdýk ve view ý oluþturduk. Update viewýnda düzenlemeler yaptýk.
+37) BarcodeResult Sýnýfý oluþturduk.
+36) BarcodeService Sýnýfý oluþturduk ve bu sýnýf için install-package HtmlAgilityPack paketini kurduk.
+37) ProductViewModel Sýnýfýný oluþturduk.
+38) Product entity sýnýfýna AvatarPath propertysini ekledik.
+39) BaseController içerisine GetProductSelectList metodunu yazdýk
+40) ProductControllerýný oluþturduk.
+41) ProductController içerisine Add get,post metodlarýný ve CheckBarcode metodunu yazdýk, View sayfasýný oluþturduk.
+
+------------------------------------------
+Identity - Üyelik Ýþlemleri
+(Youtube Video Notlarý)
+Cors: Cross origin research sharing: Farklý domainlerden farklý istekler yapabilmeyi saðlýyor.
+1) Kurulacak Paketler
+--hepsine--
+install-package Entityframework
+install-package Microsoft.aspnet.Identity.core
+install-package Microsoft.aspnet.Identity.EntityFramework
+install-package Newtonsoft.Json
+install-package Microsoft.aspnet.Identity.Owin
+
+--sadece UI--
+install-package Microsoft.Owin
+install-package Microsoft.Owin.Security
+install-package Microsoft.Owin.Security.Cookies
+install-package Microsoft.Owin.Security.OAuth
+install-package Microsoft.Owin.Host.SystemWeb
+
+--Api için
+install-package Microsoft.AspNet.WebApi.Cors
+install-package Microsoft.Owin.Cors
+install-package Microsoft.AspNet.WebApi.Owin
+
+2) Sistemi çalýþtýrdýðýmýzda owinleri kurduðumuz için bir owinstartup dosyasý isteyecek bunun için bir Web Projesi içerisinde yer alan app_start klasörüne new item ile bir owinstartup class ý ekledik ve içerisine gerekli kodlarý yazdýk.
+
+Not: Sistem IdentityUser ve IdentityRole classlarý üzerinden ilerliyor. sql de bu ki nesnenin tablolarýný kullanýyor. Bu classlar içerisinde bazý temel þyleri barýndýrýyor. Biz geniþletmek istediðimiz için user ve role diye iki sýnýf oluþturduk.
+
+3) Admin.Models içerisine IdentityModels diye bir klasor oluþturduk ve onun içerisinde de user ve role classlarýný oluþturup propertylerini yazdýk.
+
+Not: Managerlar create, find, þifre deðiþtirme..gibi iþlemlerin yapýldýgý yer
+
+4) Admin.BLL içerisine Identity diye bir klasor açtýk ve onun içerisine de MembershipTools adýnda bir class oluþturduk.
+5) Global.asax içerisine role ekleme iþlemi için gerekli kodlarý yazdýk.
+6) Temamýz içerisinde bir login sayfasý bulduk.
+7) Hesap iþlemlerini yapacagýmýz bir AccountController oluþturduk ve index view ini layoutsuz olarak oluþturduk.
+8) Temada buldugumuz login sayfasýnýn tümünü koplaya yapýþtýr ile index imize yapýþtýrdýk ve assetlerin baþýna ~ iþaretini koyduk ve gerekli düzenlemeleri yaptýk.
+9) index sayfasýnda form gonderme iþlemleri için gerekli olan razor(@html. ....) ifadelerini yazdýk.
+10) Startup class ý içerisindeki loginpath içerisine account yazdýk ve böylelikle bu sayfadan login iþlemlerinin gerçekleþecegini belirlemiþ olduk.
+11) ***Bunu eksiðini tammalayýnca ekle***CategoryController sýnýfý içerisinde namespace in hemen altýna [Autohorize] yazdýk ama bu þekilde de role verebiliriz.[Autohorize(Role="Admin,User")] 
+
+Not: Autohorize-> Category sayfasýna sadece giriþ yaparak ulaþabileceðimizi belirtiyor, bizi login(account) sayfasýna yonlendiriyor. Yani bir sayfaya sadece login olarak ulaþýlmasýný saglýyor. Yonlendirmeyi de startup a yazdýðýmýz pathe göre yapýyor.
+
+12) AccountControllerde Register Post metodunu yazdýk.ValidateAntiForgeryToken ý ayarladýk.
+13) AccountControllerde Login Post metodunu yazdýk.ValidateAntiForgeryToken ý ayarladýk.
+14) AccountControllerde Logout Get metodunu yazdýk.
+15) Login olduðumuzda temadaki header kýsmýnda yer alan kullanýcý ile ilgili kýsýmda giriþ yapan kullanýcý bilgilerini görmek istediðimiz için HeaderPartial da bazý deðiþiklikler yaptýk. Giriþ yapan kullanýcýnýn adýný headerda görmek için de bir MembershipTools içinde bir static metod yazdýk.
+16) Authorize iþlemlerini ayarladýk ***Controllerdan bunlara bak*** Authorize iþlemleri videosu 15.dk 
+17) HeaderPartial içerisinde profile a da url action verdik.
+18) ChangePasswordViewModel, UserProfileViewModel ve ProfilePasswordViewModel adlý üç View model sýnýfý daha oluþturduk.
+19) UserProfile get metodunu ve onun viewýný oluþturduk.
+20) UpdateProfile post metodunu oluþturduk.
+21) ChangePassword post metodunu oluþturduk.
+22) Bll service klasoru içerisine sender klasoru açtýk. Onun içinde IMessageService interface i tanýmladýk. Enum klasoru içerinde bir MessageStates enum sýnýfý tanýmladýk.Ayrýca sender klasoru içerisinde EmailService adýnda bir class daha tanýmladýk ve bu class IMessageService ten kalýtým alacak.
+23) AccountController da RegisterMetodu içerisine mail gondermeyle ilgili gerekli kodlarý yazdýk.
+24) AccountController da Activation metodu ve onun view ýný oluþturduk.
+25) Account ýndex e þifremi unuttum buttonu ekledik ve accountcontroller içerisinde RecoverPassword get  ve post metodu yazdýk ve Layoutsuz viewini oluþturduk.
+26) ViewModel klasoru içerisine RecoverPasswordViewModel sýnýfý oluþturduk ve bu modeli metodun ve view in içerisinde kullandýk.

@@ -1,0 +1,69 @@
+﻿@model Category
+<!--Modelimiz category tipinde olmalı veya categoryviewmodel de oluşturabilirdik. -->
+@{
+    ViewBag.Title = "Category Add";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert alert-success">
+                <p><strong>Başarılı!</strong> @TempData["Message"]</p>
+            </div><!-- Add posttan gelen başarılı kayıt mesajı.-->
+        }
+        <div class="card">
+            <!--Form başlığının oldugu kısım-->
+            <div class="card-header">
+                <h4>Kategori Ekleme Formu</h4>
+                <br />
+                <div class="text text-red">@Html.ValidationSummary()</div>  <!--Tüm validation hatalarını sırayla gösterir.-->
+                @*<ul class="card-actions">
+                        <li>
+                            <button type="button"><i class="ion-more"></i></button>
+                        </li>
+                    </ul>*@
+            </div>
+            <div class="card-block">
+                <!--Form kısmı-->
+                <!--CategoryController daki Add actionmetoduna burada girilen bilgileri submit buttonu ile post edecek.-->
+                @using (Html.BeginForm("Add", "Category", FormMethod.Post, new { @class = "form-horizontal" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <!--CategoryName içi label ve textbox-->
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.CategoryName, new { @class = "col-md-3 control-label" })
+                        <div class="col-md-7">
+                            @Html.TextBoxFor(x => x.CategoryName, new { @class = "form-control", placeholder = "Kategori Adı" })
+                            <br /><span class="text-red">@Html.ValidationMessageFor(x => x.CategoryName)</span><!--Her bir alan için o alanın altında hata mesajı gosterme. Bu hata mesajları annotationlardan geliyor.-->
+                        </div>
+                    </div>
+                    <!--Category listesi içi label ve dropdownlist-->
+                    <div class="form-group">
+                        <!-- Üst kategori id yi sececek bir combobox oluşturduk. DropDownListFor parametre olarak bir linq expression , selectlistItem tipinde bir liste ve html attribute alıyor. Bizim selectlistitem tipindeki nesnemiz viewbag ile taşınıyor ve içi Add get metodunda dolduruldu.Fakat ViewBag ile gelen nesne dynamic olduğu için yani ne geldiği belli deği o yuzden cast etmemiz gerekli-->
+                        @Html.LabelFor(x => x.SupCategoryId, new { @class = "col-md-3 control-label" })
+                        <div class="col-md-7">
+                            @Html.DropDownListFor(x => x.SupCategoryId, (List<SelectListItem>)ViewBag.CategoryList, new { @class = "form-control", size = "1" })
+                        </div>
+                    </div>
+                    <!--TaxRate içi label ve textbox-->
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.TaxRate, new { @class = "col-md-3 control-label" })
+                        <div class="col-md-7">
+                            @Html.TextBoxFor(x => x.TaxRate, new { @class = "form-control", placeholder = "Kdv Oranı", type = "number", step = "1" })
+                            <br /><span class="text-red">@Html.ValidationMessageFor(x => x.TaxRate)</span>
+                        </div>
+                    </div>
+                    <!--Submit button-->
+                    <div class="form-group m-b-0">
+                        <div class="col-md-9 col-md-offset-3">
+                            <button class="btn btn-app" type="submit">Kategori Ekle</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

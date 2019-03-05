@@ -1,0 +1,51 @@
+﻿@model  List<Category>
+@{
+    ViewBag.Title = "Kategoriler";
+}
+@using (Html.BeginForm("Add", "Category", FormMethod.Post, new { @class = "form-inline" }))   // Html.BeginForm() helper ile form nesnesini oluşturuyoruz.CategoryController ındaki Add actionına göndericez. Post u veri gondermek içi kullanıcaz.
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                @Html.TextBox("CategoryName", "", new { @class = "form-control" }) <!--CategoryName ile eşleşecek yani oraya eklenecek."" ile ilk degeri boş bırakmış olduk.Ve son parametre olarakta class verdik.-->
+            </div>
+            <div class="col-md-6">
+                @Html.TextBox("Description", "", new { @class = "form-control" })
+            </div>
+            <input type="submit" value="Kategori Ekle" class="btn btn-info" />  <!--Submitler formu tetikler ve form post yontemiyle gider.-->
+        </div>
+    </div>
+}
+<table class="table table-responsive table-striped">
+    <thead>
+        <tr>
+            <!--Tablolarımızın başlıklarının oldugu kısım-->
+            <th>#</th>
+            <th>Category Name</th>
+            <th>Description</th>
+            <th>Product Count</th>
+            <th>Detail</th>
+            <th>Update</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            var current = Model[i];
+        <tr>
+            <th>@(i + 1)</th>
+            <td>@current.CategoryName</td>
+            <td>@current.Description</td>
+            <td>@current.Products.Count</td>    <!--Navigation propertyden products a ulaşıp count ını aldık-->
+            <td><a href="@Url.Action("Detail", "Category", new { id = current.CategoryID })" class="btn btn-success">Detail</a></td>
+            <td><a href="@Url.Action("Update", "Category", new { id = current.CategoryID })" class="btn btn-warning">Update</a></td>    <!--Kategori guncelleme işlemi-->
+            <td>
+                <a href="@Url.Action("Delete", "Category", new {id = current.CategoryID})" class="btn btn-danger">Delete</a>    <!--Kategori silme işlemi-->
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+

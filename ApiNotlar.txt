@@ -1,0 +1,51 @@
+---- ANGULARJS NOTLARI ----
+1) ASP.NET Web Application projesi Empty+MVC+API sectik
+
+--> Angular ve AngularJs farklý þeyler. Angular TypeScript ile yazýlýyor. AngularJs Javascript ile yazýlýyor.
+***AngularJs: MVC design pattern ile çalýþýyor.Model,View,Controller mantýðý var. MVW, MVVM: ModelViewViewModel diye de geçiyor.(ModelViewControllerViewModel->Two way data binding: Ýki yönlü veri baðlama iþlemi. Sayfanýzda veya modelinizden herhangi birinde yaptýðýnýz deðiþiklik diðerinde görünür olacaktýr. Javascript ve html dünyasýnda ayný anda deðiþiklik yapabiliyoruz. )
+***AngularJs in en büyük özelliði two way data binding olmasý.Two way data binding dediðimiz þey javascript tarafýnda bir deðiþiklik yaptýðýmýzda html tarfaýnda da ayný anda deðiþmesi.
+
+2) Projeyi set as startup yptýk ve "install-package AngularJs.Core" package manager console ile yukleme yaptýk.
+3) Controller klasoru içerisine HomeController ekledik ve Layout kullanmadan view ýný oluþturduk.
+4) View içerisine script klasoru içerisindeki agularjs dosyasýný sürükle býrak ile ekledik.
+5) Gerekli açýklamalarýn devamý Home ýndex view ý içerisinde
+***Angular ýn da razor gibi bir selector ý vardýr.{{deger}}-> angular selectorý. Angular ýn default etiketleri ng ile baþlar.
+
+***Kod yazarken çoðu zaman hazýr yazýlmýþ baþka sýnýflarý kendi kodunuz içinde kullandýðýnýzdan, kullandýðýnýz bu diðer sýnýflara dependency denir.Bir sýnýfýn baðýmlý olduðu diðer sýnýflarý da bu sýnýf içerisine dýþarýdan enjekte edebilirsiniz buna da injection denir."Dependency Injection":Yani baðýmlý olduðunuz sýnýflarý, kendi sýnýflarýnýz içine enjekte ederek kullanmak.
+
+----------------------------------------------
+
+1) HomeController içerisine Products Actionresult ý ekledik ve layoutsuz viewini oluþturduk.
+2) Script klasoru içerisine app isimli bir Javascript file dosyasý oluþturduk ve angular kodlarýný onun içerisine yazdýk. Product View içerisine script klasoru içerisindeki appjs dosyasýný sürükle býrak ile ekledik.
+3) Gerekli açýklamalarýn devamý Home products view ý içerisinde
+
+*** Controller içerisine yazdýðýmýz hersey sayfa yuklendiðinde bir kere çalýþýyor.
+
+***AngularJs Batarang Crome eklentisi kur
+
+4) Install-Package bootstrap yukledik ve View içerisine content klasoru içerisindeki bootsrapt.min.css dosyasýný sürükle býrak ile ekledik.
+
+***CORS: Cross-Origin Resource Sharing, bir web sayfasý üzerindeki bazý kaynaklarýn, kaynaðýn sunulduðu alan adýnýn dýþýndaki bir alan adýndan istenebilmesine izin veren bir mekanizmadýr. 
+***Postman Chrome eklentisi kur
+
+--------------------------------------------------
+API Giriþ ve CRUD iþlemleri
+
+*** Uygulamamýzýn Http protokollerini kullanarak verilerin haberleþmeye açýlmasý ve platform baðýmsýz olmasý. Burada apiler xml veya json formatýnda data üretirler veya data kabul ederler.
+*** Controller oluþtururken Web Apý2 seçeneðini seçiyoruz. Api Controllerlarý ApiControllerdan kalýtým alýyor.
+*** HttpPut genelde guncelleme iþlemleri için kullanýlýyor.
+1) WebApiConfig içerisindeki routeTemplate ifadesine controllerdan sonra action ifadesini ekledik.
+2) Veri tabanýna baðlandýk. New item ile Models klasoru içerisine Ado.Net Entity Model ekledik. Serverýmýzdan Northwind databaseimize baðlandýk.
+3) Controller kýsmýna webapi2 empty category controllerý ekledik.
+*** IHttpActionResult ta birden fala return yontemi var. Hersey yolundaysa return Ok kullanýyoruz.
+*** apiler için url kýsmýna api/controller/action yazmamýz gerekiyor. apilerden gelen verileri json þeklinde görüyoruz.
+
+***Not: JsonResult ta farklý domainden eriþim yapamýyoruz.
+4) WebApiConfig içerisine bazý ayarlarý ekledik.
+5) Postman kullanarakta url üzerinden api sayfalarýna baðlanabiliyoruz get ve post iþlemlerini yapabiliyoruz
+--http://localhost:57167/api/category/getall postman get için bunu yazdýðýmýzda databaseden verileri json þeklinde getiriyor. url yi deðiþtirerek diðer iþlemleri de postmandan yapabilitiz. Post iþlemi için Post seçip Body+raw+ Json seçeneklerini seçmeliyiz.
+
+*** ProductController oluþturduk fakat bu sefer emptycontroller seceneði yerine with views using Entityframework ü sectik. Oradan çýkan ekranda model class alanýna hangi entity i kullanacaksak onu yazdýk(Product). Data context sýnýfýmýzýn adýný yazdýk(MyCon) ve controller name i yazdýk. Ýçi dolu bir product controller sýnýfý geldi(Ekleme,Silme,Güncelleme,Tüm listeyi getirme..)
+ 
+ 6) HomeController içerisine Category actionResult ýný ve onun viewýný oluþturduk. 
+ 7) app.js içerisine category view ýnda kullanýlacak angular yapýsný oluþturduk ve category view ýnýda ona göre duzenledik.

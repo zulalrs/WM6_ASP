@@ -1,0 +1,105 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html ng-app="myApp">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Products</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <script src="~/Scripts/angular.js"></script>
+    <script src="~/Scripts/app.js"></script>
+</head>
+<body>
+    <div class="container" ng-controller="ProductCtrl"> 
+        <div class="row">
+            <div class="col">
+                <input type="checkbox" class="checkbox" ng-model="ekleMi"/> Ürün Ekle @*ekleMi true oldugunda ekleme form u gelecek*@
+                <form name="urunekle" ng-show="ekleMi">
+                    <input type="text" placeholder="Ürün Adı" ng-model="yeni.urunAdi" name="urunadi" required minlength="3" /><br /> @*yeni.urunAdi değişkenini oluşturduk bu angular dosyasında scope. ile çağırılacak. Boş geçilemez ve minium uzunluğunun 3 olması koşulunu verdik.*@
+                    @*urunekle isimli formdaki urunadi isimli tagda yapılan validasyon işlemleri kontrolu. Tagları name lerinden yakaladık.*@
+                    <label style="color:red;" ng-show="!urunekle.urunadi.$valid && urunekle.urunadi.$dirty">Lütfen en az 3 karakter giriniz.</label><br /> @*urunadi nameine sahip tag ın validasyon işlemlerinin başarısız olması durumuna yani karakter sayısının 3 ten küçük ve içerisine birşeyler yazılmış olması durumunda bu mesajı göstermesini ng-show ile sagladık. *@
+
+                    <input type="number" placeholder="Fiyat" ng-model="yeni.fiyat" name="fiyat" required min="0.1" max="999" /><br /> @*yeni.fiyat değişkenini oluşturduk bu angular dosyasında scope. ile çağırılacak*@
+                    @*urunekle isimli formdaki fiyat isimli tagda yapılan validasyon işlemleri kontrolu*@
+                    <label style="color: red;" ng-show="urunekle.fiyat.$invalid && urunekle.fiyat.$dirty">Lütfen 0dan büyük 999dan küçük bir sayı giriniz</label><br /> @*fiyat nameine sahip tag ın validasyon işlemlerinin başarısız olması durumunda yani minimum degerinin 0.1 den küçük,999 dan büyük ve içerisine birşeyler yazılmış olması durumunda bu mesajı göstermesini ng-show ile sagladık. *@
+
+                    <input type="button" value="Ekle" ng-click="ekle()" ng-show="urunekle.$valid" />  @*ekle fonksiyonunu ng-click ile tetiklettik.ng-show kullanarak validasyon işlemleri sağlandığı takdirde butonun gözükmesini sağladık.*@
+                </form>
+                <br />
+                <input type="text" class="text" placeholder="Ara..." ng-model="txtara.urunAdi" /> @* Bunu ng-modele bağladığımız için scope içerisinde txtara diye bir nesne oluşturuyor. txtara.urunAdi diyerek urun adına göre arama yaptırmış oluyoruz. Sadece txtara yazsaydık her bir özelliği içerisinde arama yapacaktı. yani id si fiyatı... gibi*@
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Ürün Adı</th>
+                            <th scope="col">Fiyat</th>
+                            <th scope="col">İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="(key,item) in urunler | filter: txtara track by item.id">
+                            @*tr kısmı tekrar edeceği için bu kısma ng-repeat yazdık. ng-repeat for each gibi çalışıyor.track by item.id çakışmayı önlüyor.İçindeki id ye göre dolaş demiş oluyoruz. filter dediğimizde ise txtara nesnesine göre bir arama yapacak. filter kullanmasaydık item in urunler track by item.id şeklinde yazacaktık. key index i belirtiyor, itemda nesneyi belirtiyor.*@
+                            <td scope="row">{{key+1}}</td>
+                            <td>{{item.urunAdi}}</td>
+                            <td>{{item.fiyat}}</td>
+                            <td>
+                                <input type="button" value="Sil" ng-click="sil(item.id)" class="btn btn-danger" /> @*Nesneyi id sinden yakalayarak silme işlemini gerçekleştirecek*@
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="col">
+                <input type="text" placeholder="Ara..." ng-model="sepetara.urunAdi" /> @*ng-model için atanan arama değişkeninin ismini değiştirmeseydik her iki tabloda da aynı isimle arama yapacaktık ama biz ayrı ayrı arama yapmasını istediğimiz için değişken adını sepetara yaptık.*@
+                <table class="table">
+                    @*data yı listeleme*@
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Ürün Adı</th>
+                            <th scope="col">Fiyat</th>
+                            <th scope="col">İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="(key,item) in urunler | filter: sepetara track by item.id">
+                            <th scope="row">{{key+1}}</th>
+                            <td>{{item.urunAdi}}</td>
+                            <td>{{item.fiyat}} ₺</td>
+                            <td>
+                                <input type="button" value="Sepete Ekle" ng-click="sepeteekle(item)" class="btn btn-info" /> @*sepeteekle buttonuna tıklandığında o satırdaki nesneyi gonderecek.*@
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <hr />
+                <h3>Sepet: {{sepetToplam}} ₺</h3>
+                <table class="table">
+                    <tbody>
+                        <tr ng-repeat="(key,item) in sepetList track by item.id">
+                            <th scope="row">{{key+1}}</th>
+                            <td>
+                                {{item.adet}} <strong>x</strong>
+                            </td>
+                            <td>
+                                {{item.urunAdi}}
+                            </td>
+                            <td>
+                                {{item.fiyat * item.adet}} ₺
+                            </td>
+                            <td>
+                                <input type="button" class="btn btn-warning" value="Çıkart" ng-click="cikart(item)" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

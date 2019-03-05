@@ -1,0 +1,66 @@
+﻿@model List<Employee>
+@{
+    ViewBag.Title = "Index";
+}
+@using (Html.BeginForm("Add", "Employee", FormMethod.Post, new { @class = "form-inline" }))
+{
+    <br />
+    <div class="container">
+        <div class="row">
+            <div class="col-md-11">
+                <div class="col-md-3">
+                    @Html.TextBox("FirstName", "", new { @class = "form-control" })
+                </div>
+                <div class="col-md-3">
+                    @Html.TextBox("LastName", "", new { @class = "form-control" })
+                </div>
+                <div class="col-md-3">
+                    @Html.TextBox("HomePhone", "", new { @class = "form-control" })
+                </div>
+                <div class="col-md-3">
+                    @Html.TextBox("Address", "", new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-md-1">
+                <input type="submit" value="Ekle" class="btn btn-info" />
+            </div>
+        </div>
+    </div>
+}
+<table class="table table-responsive table-striped">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Phone</th>
+            <th>Adress</th>
+            <th>Detail</th>
+            <th>Update</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            var current = Model[i];
+            <tr>
+                <th>@(i + 1)</th>
+                <td>@current.FirstName</td>
+                <td>@current.LastName</td>
+                <td>@current.HomePhone</td>
+                <td>@current.Address</td>
+                <td>
+                    <a href="@Url.Action("Detail", "Employee", new { id = current.EmployeeID })" class="btn btn-success">Detail</a>
+                </td>
+                <td>
+                    <a href="@Url.Action("Update", "Employee", new { id = current.EmployeeID })" class="btn btn-warning">Update</a>
+                </td>
+                <td>
+                    <a href="@Url.Action("Delete", "Employee", new { id = current.EmployeeID })" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

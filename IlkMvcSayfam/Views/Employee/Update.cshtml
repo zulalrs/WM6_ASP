@@ -1,0 +1,36 @@
+﻿@model Employee
+@{
+    ViewBag.Title = "Update";
+}
+
+<div class="container">
+    <div><h2>@Html.Raw(ViewBag.Message)</h2></div>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            @using (Html.BeginForm("Update", "Employee", FormMethod.Post))
+            {
+                @Html.HiddenFor(x => x.EmployeeID)
+                <div class="form-group">
+                    <label for="FirstName">First Name</label>
+                    @Html.TextBoxFor(x => x.FirstName, new { @class = "form-control", placeholder = "FirstName" })
+                </div>
+                <div class="form-group">
+                    <label for="LastName">Last Name</label>
+                    @Html.TextBoxFor(x => x.LastName, new { @class = "form-control", placeholder = "LastName" })
+                </div>
+                <div class="form-group">
+                    <label for="HomePhone">Home Phone</label>
+                    @Html.TextBoxFor(x => x.HomePhone, new { @class = "form-control", placeholder = "HomePhone" })
+                </div>
+                <div class="form-group">
+                    <label for="Address">Adress</label>
+                    @Html.TextBoxFor(x => x.Address, new { @class = "form-control", placeholder = "Address" })
+                </div>
+                <button type="submit" class="btn btn-warning">Update</button>
+                <button type="reset" class="btn btn-default">Clear</button>
+            }
+        </div>
+    </div>
+</div>
+
+

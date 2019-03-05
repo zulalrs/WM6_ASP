@@ -1,0 +1,29 @@
+﻿@model Category
+@{
+    ViewBag.Title = "Update";
+}
+<!--Get işlemi için yazdığımız update action ından gelen nesnemiz Model diye bir property e aktarılıyor ve o property üzerinden artık gelen nesnemizin propertylerine erişebiliyoruz -->
+<div class="container">
+    <div><h2>@Html.Raw(ViewBag.Message)</h2></div>  <!--Ham olarak gelen html mesajı goruntulemek için bunu kullanıyoruz. Böylece mesajda yazdıgımız taglar sıkıntı çıkarmayacak-->
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            @using (Html.BeginForm("Update", "Category", FormMethod.Post)) //-Html.BegiForm(Action adı,Controller adı,Metod) form oldugunu belirtiyor.Aşagıdaki kodlar <form> tagı arasında da yazılabilirdi. O zaman Url.Action vermemiz gerekecekti.
+            {
+                @Html.HiddenFor(x => x.CategoryID) <!--Güncelleme için Id lazım ama eger Id yi sayfada göstermek istemiyorsak o zaman hiddenfor kullanıyoruz.Hidden input u modelin formun içinde olmasını ama dışarıdan gorulmemesini saglıyor.-->
+                <div class="form-group">
+                    <label for="CategoryName">Category Name</label>
+                    @Html.TextBoxFor(x => x.CategoryName, new { @class = "form-control", placeholder = "CategoryName" })
+                    <!--TextboxFor ile text in içini
+                    dolu gelmesini saglıyoruz. Otomatik olarak veriyi bind ediyor.İçerisi model bazlı çalışıyor.TextboxFor burada iki parametre aldı.İlk parametresi expression, ikinci parametresi de html attribute.html attribute lardan class yazarken başına muhakkak at işareti koymalıyız. class = "form-control" yazmamızın sebebi sadece güzel gözukmesi-->
+                </div>
+                <div class="form-group">
+                    <label for="Description">Description</label>
+                    @Html.TextBoxFor(x => x.Description, new { @class = "form-control", placeholder = "Description" })
+                </div>
+                <button type="submit" class="btn btn-warning">Update</button> <!--Bu button tipi formu post ettiği için yani formu gonderme işlemi yaptığı için Update(Post) actionı çalıştıracak.-->
+                <button type="reset" class="btn btn-default">Clear</button>
+            }
+        </div>
+    </div>
+</div>
+

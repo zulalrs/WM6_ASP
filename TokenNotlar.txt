@@ -1,0 +1,32 @@
+Token Ýle Ýlgili 
+1) Controller klasoru içerisine WebApi Adýnda bir klasor açtýk ve içine AccountController adýnda bir webapi2 empty controllerý ekledik.
+2) Sonradan WebApi eklediðimiz için Global.asax ta deðiþiklik yapmamýz gerektiðini soyleyen bir yazýyla karþýlaþtýk ve oradaki talimatlarýný yerine getirdik.
+3) App_Start klasoru içerisindeki WebConfig sýnýfýnda düzenleme yaptýk( routeTemplate: "api/{controller}/{action}/{id}")
+4) WebApi klasorun içine Auth diye bir klasor ekledik. Onun da içine Provider adlý sýnýfý ekledik.
+
+*** External Cookie: Harici bir servis saðlayýcý ile login olmak.
+*** Barear: Api üzerindeki bir token ile login olmak.
+
+5) Package Manager dan Api için gerekli owin kurulumlarýný yaptýk.
+<<<
+install-package Microsoft.AspNet.WebApi.Cors
+install-package Microsoft.Owin.Cors
+install-package Microsoft.AspNet.WebApi.Owin 
+>>>
+
+6) App_Startup klasoru içerisindeki startup classýna bir kaç kod ekledik.
+
+7) Deneme:Postman den token alma iþlemi gerçekleþtirdik
+-> Post seçtik
+-> url kýsmýna http://localhost:57364/token yazdýk
+-> Body raw sectikten sonra içine username=zulal&password=123456&grant_type=password  yazdýk
+-> Send ettik ve token ýmýz geldi
+
+8) WebApi klasoru içerisindeki Accountcontroller içine GetLoginInfo metodunu yazdýk.
+
+9) Deneme:Authorize varken token kullanarak login olma iþlemi için postmande get url içine http://localhost:57364/api/account/getlogininfo yazdýk. Header kýsmýna gelip Key:Authorization Value:Bearer token yazdýk ve send ettik böylece login olan kullanýcý bilgilerine eriþmiþ olduk.
+
+10) Admin.Web.UI içerisine LoginTest isimli bir html sayfasý ekledik.
+
+
+Notlar: *Platform baðýmsýzlýðý için api veya web service kullanýyoruz. api ile verilerimizi tüm platformlarýn anlayacaðý get ve post ile çalýþan json veya xml e çevirmiþ oluyoruz. * Mobilden buradaki kullanýcý ismimiz ve þifremiz ile giriþ yapabilmemiz için token gerekiyor. Biz tokenýmmýzý uygulamanýn üzerinden yani app_startup klasoru içerisinde çaðýrýyoruz. Startup sýnýfý içerisinde bir token nesnesi oluþturduk. Oraya username ve passwordu gonderdik ve oradan bize bir token geldi.Artýk apinin üzerindeki herhangi bir kaynaða eriþirken yanýnda token bilgisinide gondererek yetkimiz olan alanlardaki istediðimiz veriyi alabiliyoruz.

@@ -1,0 +1,70 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html ng-app="myApp">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Category</title>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <script src="~/Scripts/angular.js"></script>
+    <script src="~/Scripts/app.js"></script>
+</head>
+<body>
+    <div class="container" ng-controller="CategoryCtrl">
+        <div class="row justify-content-center" ng-show="istekVarMi">
+            @*istekVarMi degeri true olduğunda bu yazı gözükecek*@
+            <div class="col">
+                <h4>Veri yükleniyor...</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <form name="ekleform">
+                    @*scope içerisinde yeni diye bir değişken tanımlamış olduk ve içerisinde de CategoryName,CategoryID ve Descriptiob diye de bir propertyleri var*@
+                    <input type="hidden" ng-model="yeni.CategoryID" />  @*Guncelleme işlemi için categoryid yi burada yazdık.*@
+                    <input type="text" class="form-control" ng-model="yeni.CategoryName" placeholder="Kategori Adı" /><br />
+                    <input type="text" class="form-control" ng-model="yeni.Description" placeholder="Açıklama" /><br />
+                    @*Ekle için app içerisinde fonksiyonunu oluşturduk.guncelleMi false oldugu zaman bu buttonu gösterecek.*@
+                    <input type="button" value="Ekle" class="btn btn-success" ng-click="ekle()" ng-show="!guncelleMi" />
+
+                    @*guncelleMi true olduğu zaman bu buttonu gosterecek*@
+                    <input type="button" value="Güncelle" class="btn btn-info" ng-click="guncelle()" ng-show="guncelleMi" />
+                </form>
+            </div>
+        </div>
+        <input type="search" placeholder="Ara.." class="form-control" ng-model="txtara" />
+        @*Kategorilerin listeleneceği alan*@
+        <div class="row">
+            <div class="col">
+                <table class="table table-dark">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Kategori Adı</th>
+                            <th>Açıklama</th>
+                            <th>İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="(key,item) in categoryList | filter:txtara track by item.CategoryID">
+                            <th scope="row">{{key+1}}</th>
+                            <td>{{item.CategoryName}}</td>
+                            <td>{{item.Description}}</td>
+                            <td>
+                                @*Silme işlemi için parametre olarak CategoryId gonderiyoruz.*@
+                                <input type="button" value="Sil" class="btn btn-danger" ng-click="sil(item.CategoryID)" />
+                                @*getir fonksiyonu ile o kategorinin guncellemesinin yapılacağını belirtiyoruz ve kategorimizi parametre olarak gonderiyoruz.*@
+                                <input type="button" value="Güncelle" class="btn btn-warning" ng-click="getir(item)" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

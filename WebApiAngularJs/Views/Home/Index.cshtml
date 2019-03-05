@@ -1,0 +1,40 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html ng-app="myApp">
+@*ng-app yazarak bu html uygulamasının bir angular uygulaması olduğunu belirttik*@
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <script src="~/Scripts/angular.js"></script>
+    <script>
+        // Burası referans kısım olarak kabul ediliyor bu yuzden bu kısma yazdığımız angular nesnelerini aşağıda kullanabiliriz. En çok kullanacağımız nesne scope nesnesi. Scope bizim modelimiz olacak.
+        var app = angular.module("myApp", []); /* [] kısmı Dependency Injection ı ifade ediyor. Yani angular ile birlikte ekstra kullanacağımız paketleri bunun içerisinde tanımlayacagız. myApp in bir angular modul oldugunu belirttik. */
+
+        app.controller("homeCtrl", function ($scope) {
+            $scope.toplam = 0;
+            $scope.kisiler = [];
+            $scope.yeniKisi = {};
+
+            //Direk topla olarak yazsaydık çalışmayacaktı. Aşağıda tanımlananlar scope içeriisnde tanımlanmış oluyor ve sadece onunla birlikta çağırılınca ulaşılabiliyor.
+            $scope.topla = function () {
+                $scope.toplam = $scope.sayi1 + $scope.sayi2;
+                console.log($scope.toplam);
+            }
+        }); /* Bir controller tanımladık.Ve callback function ın yazdık.*/
+    </script>
+</head>
+<body>
+    <div class="main" ng-controller="homeCtrl">
+        @*model ile view in bağlantısını burada sağlamış olduk. Yukarıda angular içerisinde tanımladığımız her şeyi bu div içerisinde kullanabiliriz.*@
+        @*ng-model içerisine yazdığımız sayi1 ve sayi2 ile aslında biz iki değişken tanımlamış olduk ve bu değişkenler scope içerisinde tanımlanmış oldu. Bu değişkenlere scope. diyerek ulaşabiliriz.Bu değişenleri yukarıda kullanmak istersek scope. diyerek, burada kullanmak istersekte direk sayi1 ve sayi2 diye kullanıyoruz.*@
+        <input type="number" placeholder="Sayı 1" ng-model="sayi1" ng-change="topla()" /><br /> @*ng-change ile input içerisi her değiştiğinde topla fonksiyonu çağırılacak*@
+        <input type="number" placeholder="Sayı 2" ng-model="sayi2" ng-change="topla()" /><br />
+        <span><strong>{{toplam}}</strong></span>
+    </div>
+</body>
+</html>

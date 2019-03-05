@@ -1,0 +1,241 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+<!--Controllerdan veri göndermediğimiz için yukarıya herhangi bir model yazmadık. -->
+
+<br />
+<br />
+<br />
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <form class="form-inline" id="frmAdd">
+                <div class="form-group">
+                    <label for="txtCategoryName">Category Name</label>
+                    <input type="text" class="form-control" id="txtCategoryName" placeholder="Category Name">
+                </div>
+                <div class="form-group">
+                    <label for="txtDescription">Description</label>
+                    <input type="text" class="form-control" id="txtDescription" placeholder="Description">
+                </div>
+                <button type="submit" class="btn btn-info">Add Category</button>
+                <div id="messagediv"></div>
+            </form>
+            <form class="form-inline" id="frmUpdate" style="display:none">
+                <input type="hidden" id="CategoryID" /> <!--Guncelleme işleminde sectiğimiz nesnenin verilerini textboxlarda göstermek istediğimizde Id yi de bir yere atamamız gerekecek. Çünkü Id ye göre veri üzerinde guncelleme işlemini yapacagız. Bunun için Id yi tutacak olan bu elementi yazdık ve ekranda gorunmesını istemediğimiz için de hidden yaptık. -->
+                <div class="form-group">
+                    <label for="txtCategoryName2">Category Name</label>
+                    <input type="text" class="form-control" id="txtCategoryName2" placeholder="Category Name">
+                </div>
+                <div class="form-group">
+                    <label for="txtDescription2">Description</label>
+                    <input type="text" class="form-control" id="txtDescription2" placeholder="Description">
+                </div>
+                <button type="submit" class="btn btn-info">Update Category</button>
+                <div id="messagediv2"></div>
+            </form>
+        </div>
+    </div>
+    <br />
+    <!--Arama textinin oldugu kısım-->
+    <div class="row" id="searchdiv">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="col-lg-8">
+                <div class="input-group input-group-lg">
+                    <input type="text" id="txtsearch" class="form-control" placeholder="Search for..."> <!--Placeholder textbox ın içinde gözukecek silik yazı.-->
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                    </span>
+                </div><!-- /input-group -->
+                <div id="resultmessage"></div>
+            </div><!-- /.col-lg-6 -->
+        </div>
+    </div>
+    <div class="row" id="resultdiv">
+        <div class="col-md-10 col-md-offset-1">
+            <table class="table table-responsive table-striped">
+                <thead>
+                    <tr>
+                        <!--Tablolarımızın başlıklarının oldugu kısım-->
+                        <th>#</th>
+                        <th>Category Name</th>
+                        <th>Description</th>
+                        <th>Product Count</th>
+                        <th>Detail</th>
+                    </tr>
+                </thead>
+                <!--tbody nin içine dolu gelen satırlarımız eklenecek-->
+                <tbody id="resultbody"></tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <!--Section Layouttaki RenderSectiondan geliyor.scripts te onun parametresi.Sayfanın en altında javascript kodları yazmamızı saglıyor.Sayfanın en altına birşey yazmak istediğimiz zaman bunu özel sayfalarda yazmak istediğimizda sayfanın altına section açıyoruz boşluk veriyoruz ve layouttaki render section içerisindeki ismi yazıyoruz.-->
+    <script>
+        $(function () {
+            setInterval(init, 10000);
+
+            // 4) Tüm kategorileri getirme işlemi
+            function init() {
+                $.ajax({
+                    url: "@Url.Action("Search","Category", new { s="*"})",  //Url.action ile Category controllundaki search action ına s adında bir route value gonderiyoruz. Ve degerine * atıyoruz. Backend de yazdığımız search metoduna göre * olduğunda tüm kategoriler geleck.
+                    method: "get",
+                    dataType: "json",
+                }).done(function (e) {  // Backend den dönen responsedata e ye duşuyor. e.data dediğimzde data propertysine erişmiş oluyoruz.Buradaki data propertysi tüm category nesnelerimizi içinde barındırıyor.
+                    if (e.success) {
+                        renderdata(e.data); // data mızı renderdata metodu ile çalıştırıp tüm kategorilerin ekrana yazılmasını saglıyoruz.
+                        $("#resultdiv").show(600);
+                    }
+                    else {
+                        alert(e.message);
+                    }
+                });
+            }
+
+            // 5) Kategori güncelleme işlemi:
+            // Bu button kategori guncellemeyi asıl gerceklestirecek button.
+             $("#frmUpdate").submit(function (ev) {
+                ev.preventDefault();  // Bu event ı gonderdıkten sonra çalışmasını iptal ediyoruz.
+                 var data = {
+                    CategoryName: $("#txtCategoryName2").val(),
+                    Description: $("#txtDescription2").val(),
+                    CategoryID: $("#CategoryID").val()
+                }
+                $.ajax({    // Url action ile Update JsonResult ına değiştirme yaptığımız yeni datayı gonderiyoruz.
+                    url: '@Url.Action("Update","Category")',
+                    method: "post",
+                    dataType: "json",
+                    data: data,
+                }).done(function (e) {
+                    alert(e.message);
+                    if (e.success) {
+                        init();
+                        $("#frmUpdate").hide();
+                        $("#frmAdd").show(400);
+                    }
+                    });
+            });
+
+            // 3) Yeni bir Categori ekleme işlemi
+            $("#frmAdd").submit(function (ev) {
+                ev.preventDefault();    // Çalışmasını engelliyor.???
+                var data = {    // Textboxlara girilen degerleri bir data nesnesine atadık. Ve bu datayı ajax ın post metodu ile Add JsonResult ına gönderecegiz. // Bir obje oluşturduk ve içine kullanacagımız propertyleri yazdık.
+                    CategoryName: $("#txtCategoryName").val(),
+                    Description:$("#txtDescription").val()
+                }
+                $.ajax({
+                    url: '@Url.Action("Add","Category")',
+                    method: "post",
+                    dataType: "json",
+                    data: data, // Datayı buradan methodun parametresine gönderdik.
+                }).done(function (e) {  // e: metoddan gelen response datayı temsil ediyor.
+                    alert(e.message);
+                    });
+            });
+
+            // 1) textbox a yazılan herbir deger için jqueryle eventını oluşturma işlemi.Bunun için keyup eventını tetikletecegiz
+            $("#resultdiv").hide();
+            $("#txtsearch").keyup(function (e) {
+                $("#resultmessage").hide();
+                $("#resultdiv").hide();
+                var key = $(this).val();    // this nesnesi tetikleyen fonksiyonu temsil eder. this nesnesini $ ile seçip val fonksiyonunu çalıştırdığımızda textboxa girlen degeri bize dondurur.JsonResult parametresini her keyup işleminde buradan gonderiyoruz.
+                if (key.length < 3) // Eger key in uzunlugu 3 ten kucukse herhangi birsey yapmasın.
+                    return;
+
+                // 1-a) Ajax: Key i sayfamızdaki search actionına get metodu ile gonderme işlemi:
+                $.ajax({
+                    url: '@Url.Action("Search","Category")' + "?s=" + key,   //id miz olmadığı için gönderdiğimiz key ?s=key seklinde olacak
+                    method: "GET",
+                    dataType: "json"
+                }).done(function (e) {
+                    $("#resultmessage").fadeIn(400);
+                    console.log(e);
+                    if (e.success) {    // Bütün JsonResultları response data ile gonderdiğimiz için cevabında bize response datanın propertyleri gelecek. success true geldiği takdirde yukarıda tanımladığımız resultmessage id li div arasına  jsonResulttan donen responsedata nın mesaj ropertysi yazılacak
+                        $("#resultmessage").html("<span class='text text-success'><h2>" + e.message + "</h2></span>");
+                        if (e.data.length > 0) {    // Hem arama başarılı hem de elimizde bir data varsa o zaman o dataları ekrana tablo şeklinde yazdıracak metodu cağırıyoruz.
+                            renderdata(e.data); // Verileri ekrana basma fonksiyonu
+                            $("#resultdiv").show(600);
+                        }
+                    } else {    // e.success false ise bu sefer success in false taki mesajını gonderecek
+                        $("#resultmessage").html("<span class='text text-danger'>" + e.message + "</span>");
+                    }
+                });
+            });
+
+            // 2) Tabloyu dolduracagımız yer
+             function renderdata(data) {
+                 $("#resultbody").empty();
+                 // each=Foreach kullanarak gelen her bir data için ekranda görünmesini istediğimiz sekli tanımlayacagız.Bir objet bir de callback function parametrelerini alır.object array olmalı
+                $.each(data,
+                    function (key, value) { // Sadece bir parametre alırsa o value dur ve arraydeki her bir elemanı temsil eder data[0],.. gibi.İki parametre alırsa biri index i,diğeri o indexteki degeri tutar. Eğer each in ilk paramtresi array değilde object olursa callback in ilk parametresi yani key property adını, value da propertynin degerini temsil eder.value degeri datadan gelen herbir objeyi tutuyor ve o objelerin propertyleri var.
+                        var tr = document.createElement("tr");
+                        var th = document.createElement("th");
+                        th.innerText = key + 1;
+                        var td = document.createElement("td");
+                        td.innerText = value.CategoryName; // value category objesi tuttugu için onun propertylerini çağırabiliriz.
+                        var td2 = document.createElement("td");
+                        td2.innerText = value.Description;
+                        var td3 = document.createElement("td");
+                        td3.innerText = value.ProductCount;
+                        var td4 = document.createElement("td");
+                        var a = document.createElement("a");
+                        $(a).attr("href", "@Url.Action("Detail", "Category")" + "/" + value.CategoryID).attr("class", "btn btn-success").html("Detail");
+
+
+                        var btnSil = document.createElement("input");   // Sil buttonunu tr ye ekleyecegimiz için burada bir input nesnesi oluşturduk
+                        $(btnSil).attr({    // input nesnesinin özelliklerini doldurma:
+                            "type": "button",
+                            "class": "btn btn-danger",
+                            "value": "Delete",
+                            "name": value.CategoryID
+                        }).on("click", function () { //Click eventi calıştığında
+                            var id = this.name; // id ye bu nesneden gelen name e atanmış id yi atıyoruz. ajax işlemi ile de Delete JsonResut actionını tetkliyoruz ve bu id i o methoda post ediyoruz. Böylece o id deki category back end tarafında method içerisindeki işlemler sayesinde silinecek.
+                            $.ajax({
+                                url: "@Url.Action("Delete","Category")",
+                                method: "post",
+                                dataType: "json",
+                                data: { id: id }
+                            }).done(function (e) {  // İşlem bittikten sonra da init foksiyonu tekrar cağırılacak ve böylece kategorilerim tekrardan ekranda sıralanacak
+                                alert(e.message);
+                                init();
+                            });
+                         });
+
+                        var btnGuncelle = document.createElement("input");
+                        $(btnGuncelle).attr({   // tr içerisine eklenecek guncelle buttonunu oluşturduk ve attribute larını yazdık. Bu button sadece frmAdd nin gizlenmesini ve frmUpdate in içindeki verilerle birlikte dolu olarak gösterilmesini saglıyor.
+                            "type": "button",
+                            "class": "btn btn-warning",
+                            "value": "Update",
+                            "name": value.CategoryID
+                        }).on("click", function () { // Tıklandığında oluşturduğumuz değişkenlere satır içerisindeki textlerin atamasını yaptık.
+                            var CategoryID = this.name;
+                            // this tıkladığımız buttonu temsil ediyor. Onun parent ı td nesnesi onun da parent ı tr nesnesi. Biz tr nin child larına erişip onların textlerini almak istiyoruz.Onun için aşagıdaki işlemleri yaptık.
+                            var satir = $(this).parent().parent()[0].childNodes;
+                            var categoryName = satir[1].innerText;
+                            var description = satir[2].innerText;
+
+                            // Textlerden aldığımız değerleri elementlerin id lerini kullanarak value lerine atadık.
+                            $("#CategoryID").val(CategoryID);
+                            $("#txtCategoryName2").val(categoryName);
+                            $("#txtDescription2").val(description);
+                            $("#frmAdd").hide();
+                            $("#frmUpdate").show(400);
+                            });
+
+                        $(a).appendTo(td4);
+                        $(btnSil).appendTo(td4);
+                        $(btnGuncelle).appendTo(td4);
+                        $(tr).append(th).append(td).append(td2).append(td3).append(td4).appendTo($("#resultbody"))
+                });
+            }
+            init();
+        });
+    </script>
+}
+
+

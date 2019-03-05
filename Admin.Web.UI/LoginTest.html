@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="assets/css/bootstrap.css" rel="stylesheet" />
+    <script src="assets/js/core/jquery.min.js"></script>
+</head>
+<body>
+    <div id="login">
+        <input type="text" placeholder="username" id="txtusername" /><br />
+        <input type="password" id="txtpassword" placeholder="txtpassword" />
+        <br />
+        <input type="button" value="Login" id="btnlogin" />
+    </div>
+    <div id="info">
+        Hoşgeldin <label id="lblinfo"></label>
+        <img src="#" width="250" height="250" id="imguser" />
+        <br />
+        <input type="button" value="Logout" id="btnlogout" />
+    </div>
+
+    <script>
+        $(function () {
+            $("#btnlogin").click(function () {
+                $.ajax({
+                    // Login buttonuna tıklandığında verdiğimiz url ye data yı gonderecek ve oradan bir token alacak. Her loginde farklı bir token getirecek.
+                    url: "http://localhost:57364/token",
+                    method: "POST",
+                    data: "username=" +
+                        $('#txtusername').val() +
+                        "&password=" +
+                        $('#txtpassword').val() +
+                        "&grant_type=password"  // Token almak için gerekli ifade username=zulal&password=123456&grant_type=password. username ve password degerlerini textbox a girilen verilerden aldık.
+                }).done(function (res) {
+                    console.log(res);
+                    localStorage.setItem("token", res.access_token);    // Token ı localstorage a kaydedecek.
+                    init();
+                });
+            });
+
+            function init() {
+                $.ajax({
+                    // Aldığımız Tokenı kullanarak giriş yapma
+                    url: "http://localhost:57364/api/account/getlogininfo",
+                    method: "GET",
+                    headers: {
+                        "authorization": "Bearer " + localStorage.getItem("token"), // LocalStorageden token ı aldık. Böylece kullanıcıya ulaşmış olduk. Bütün isteklerimizin yanında bunu gondermemiz gerkiyor. Yani bir authorization header ı ile gondermemiz gerekiyor. Çünkü diğer tarafta actionın üzerine yazdığımız bir authorize attribute var ve ondan geçebilmesi için de bunu gondermemiz gerekiyor.
+                        "content-type": "application/json",
+                    }
+                }).done(function (res) {
+                    if (res.success) {  // Login işlemi başarılı ise login kısmını gizleyecek info kısmını getirecek
+                        $("#login").hide();
+                        $("#info").show();
+                  
+                    $("#lblinfo").html(res.Name + " " + res.Surname);   // Ulaştığımız kullanıcının bazı verilerini buradan ekrana yazdırdık.
+                        //$("#imguser").attr("src", "https://localhost:44349" + res.data.AvatarPath);  
+                    } else {    // Başarılı değilsede tam tersini yapacak.
+                        $("#login").show();
+                        $("#info").hide();
+                    }
+                });
+            };
+
+            $("#btnlogout").click(function () { // Logouta tıklandığında localStorage tan token ı silecek ve init fonksiyonunu tekrar çalıştıracak.
+                localStorage.removeItem("token");
+                init();
+            });
+            
+            init();
+        });
+    </script>
+</body>
+</html>

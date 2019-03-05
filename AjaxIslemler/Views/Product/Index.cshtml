@@ -1,0 +1,270 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<br />
+<br />
+<br />
+<div class="loading">
+    <!--Loadig kısmı-->
+    <img src="~/img/loading.gif" width="100" height="100" class="img-circle" />
+</div>
+<div class="container blur">
+    <!-- Container kısmı-->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- Form kısmı-->
+            <form class="form-horizontal" id="frmAdd">
+                <div class="col-md-6">
+                    <!-- Sol taraftaki form grupları-->
+                    <div class="form-group">
+                        <label for="txtProductName" class="col-sm-4 control-label">Product Name</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="txtProductName" placeholder="Product Name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="cmbCategory" class="col-sm-4 control-label">Category Name</label>
+                        <div class="col-sm-8">
+                            <select id="cmbCategory" class="form-control">
+                                <option value="1">a</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>    <!-- Sol taraftaki form grupları-->
+
+                <div class="col-md-6">
+                    <!-- Sağ taraftaki form grupları-->
+                    <div class="form-group">
+                        <label for="txtUnitPrice" class="col-sm-4 control-label">Unit Price</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control" min="0" max="9999" step=".01"
+                                   id="txtUnitPrice" placeholder="Unit Price">
+                        </div>
+                    </div>
+                    <div class="form-group"> 
+                        <label for="txtQuantityPerUnit" class="col-sm-4 control-label">Quantity Per Unit</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="txtQuantityPerUnit" placeholder="Quantity Per Unit">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-4 col-sm-8">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" id="cbDiscontinued"> Discontinued
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>    <!-- Sağ taraftaki form grupları-->
+
+                <div class="col-md-6">
+                    <!-- Button -->
+                    <div class="form-group">
+                        <div class="col-sm-offset-4 col-sm-6">
+                            <button type="submit" class="btn btn-info btn-block">Add Product</button>
+                        </div>
+                    </div>
+                </div>    <!-- Button -->
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Search kısmı -->
+        <div class="col-sm-6 col-sm-offset-3 col-xs-12">
+            <input type="search" id="txtsearch" class="form-control" />
+        </div>
+    </div>
+    <br />
+    <div class="row" id="resultdiv">
+        <!-- Tablo kısmı-->
+        <div class="col-md-12">
+            <table class="table table-responsive table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Product Name</th>
+                        <th>Category Name</th>
+                        <th>Unit Price</th>
+                        <th>Quantity Per Unit</th>
+                        <th>Added Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="resultbody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <style> /*loading gif style*/
+        .loading {
+            z-index: 100;
+            position: fixed;
+            top: 40%;
+            left: 45%;
+        }
+    </style>
+    <script>
+        $(function () {
+            // 6) Loading işlemleri:
+            //Jquery eventlerinde sayfanın ajax işlemi yapıp yapmadıgını ogrenebiliyoruz.
+            $(".loading").hide();
+            $(document).ajaxStart(function (ev) {   // Document içerisinde ajax işlemleri başladıgında loading gif ini gösterecek. resultdiv id sine sahip kısmı göstermeyecek.
+                //$(".blur").hide();
+                $(".loading").show();
+                $("#resultdiv").hide();
+            });
+            $(document).ajaxStop(function (ev) {     // Document içerisinde ajax işlemleri bittiğinde de tam tersi işlemleri yapacak.
+                $(".loading").hide();
+                $("#resultdiv").show(100);
+                //$(".blur").show(100);
+            });
+
+            // 7) Keyup için ajax işlemlerini sıralama
+            // Bu kod blogu ilk çalışan ajax ın işlemi bitene kadar bekliyor sonra bir diğerine geçiyor. Böylece keyupta yasadığımız sıkıntıyı çözmuş oluyoruz.
+            $.ajaxQueue = [];
+            var que = $.ajaxQueue;
+            $.ajaxSetup({
+                beforeSend: function () { // Her bir ajax istegi gonderdiğimizde arrayımıze once push edip sonra o istegi gonderiyor.
+                    if (this.queue) {
+                        que.push(this);
+                    }
+                    else {
+                        return true;
+                    }
+                    if (que.length > 1) {
+                        return false;
+                    }
+                },
+                complete: function (e) {    // İstek sonlandığında e nin içinde responsejson var onun içinde de bizim Jsonresulttan donen responsedata mız var.Böylece onun özelliklerine erişebiliriz.
+                    console.log(e);
+                    if (e.responseJSON.success) {
+                        renderData(e.responseJSON.data);
+                    } else {
+                        alert(e.responseJSON.message);
+                    }
+                    que.shift(); // shift array i baştan siler. pop en son ekleneni siler yani sondan siler
+                    var newReq = que[0];
+                    if (newReq) {
+                        // setup object creation should be automated
+                        // and include all properties in queued AJAX request
+                        // this version is just a demonstration.
+                        var setup = {
+                            url: newReq.url,
+                            success: newReq.success
+                        };
+                        $.ajax(setup);
+                    }
+                }
+            });
+
+
+
+            // 2) Tüm kategori ve productları getirme fonksiyonu.
+            function init() {
+                $.ajax({
+                    url: "@Url.Action("GetAllCategories", "Product")",
+                    method: "get",
+                    dataType: "json"
+                }).done(function (e) { // İstek gidip geldiğinde veri e değişkeni içerisinde olacak.
+                    if (e.success) {
+                        $("#cmbCategory").empty();
+                        // En başa kategorisi olmayan urun olabilir diye boyle bir option ekledik.
+                        $("#cmbCategory")
+                            .append($("<option></option>")
+                            .attr("value", 0)
+                            .text("Kategorisi Yok"));
+                $.each(e.data, function (key, value) {  // Data dan gelen her bir deger için option ekledik ve özelliklerini burada belirledik.
+                    $('#cmbCategory')
+                            .append($("<option></option>")
+                            .attr("value", value.CategoryID)
+                            .text(value.CategoryName));
+                            });
+                        }
+                    });
+                 $.ajax({   //Productları getirme işlemi
+                    url: "@Url.Action("GetAllProducts","Product")",
+                    method: "get",
+                    dataType: "json"
+                }).done(function(e) {
+                    if (e.success) {
+                        renderData(e.data);
+                    }
+                });
+            }
+
+            // 4) Tablomuzun dolacagı kısım:
+            function renderData(data) {
+                if (data && data.length == 0) {
+                    $("#resultdiv").hide();
+                    return;
+                }
+                $("#resultdiv").show(400);
+                $("#resultbody").empty();
+                $.each(data, function (key, value) {
+                    $("<tr></tr>")  // tr nin içini burada doldurduk. Her bir başlık için kolonları burada ekledik.
+                        .append($("<th></th>").text(key + 1))
+                        .append($("<td></td>").text(value.ProductName))
+                        .append($("<td></td>").text(value.CategoryName))
+                        .append($("<td></td>").text(value.UnitPriceFormatted))
+                        .append($("<td></td>").text(value.QuantityPerUnit))
+                        .append($("<td></td>").text(value.AddedDateFormatted))
+                        .append($("<td></td>").text("button"))
+                        .appendTo($("#resultbody"));
+                });
+            }
+
+
+            // 5) Arama kutucugu:
+            $("#txtsearch").keyup(function () {
+                $.ajax({    // GetAllProducts metodu url action ile tetiklenecek.Url actiondaki key i parametre olarak alacak ve ona göre metodun içindeki kodlar çalışacak ve bize oradan bir data geleck. Her tuşa bastıgımızda bir ajax istegi tetikletiyoruz.
+                    url: "@Url.Action("GetAllProducts","Product")" + "?key=" + $("#txtsearch").val(),
+                    method: "get",
+                    dataType: "json",
+                    queue: true
+                });
+            });
+
+            // 3) Product ekleme işlemleri:
+            $("#frmAdd").submit(function (ev) {
+                ev.preventDefault();
+                var data = {
+                    CategoryID: $("#cmbCategory option:selected").val(),    //Comboboxtan secilen id yi alacak
+                    ProductName: $("#txtProductName").val(), // txtProductName id sine sahip textboxt a yazılan degeri alacak
+                    UnitPrice: $("#txtUnitPrice").val().replace(".", ","),// txtUnitPrice id sine sahip numeric e yazılan degeri alacak ama bu arada dil farkından oluşan . v , sorunu için replace yaptık.
+                    QuantityPerUnit: $("#txtQuantityPerUnit").val(),
+                    Discontinued: $("#cbDiscontinued").is(':checked')   // cbDiscontinued id sine sahip checkbox ın secili degerini alacak true veya false ile
+                };
+                console.log(data);
+                $.ajax({
+                    url: "@Url.Action("Add","Product")",    // Data mızı Add metodunun parametresine gonderdık.
+                    method: "post",
+                    dataType: "json",
+                    data:data
+                }).done(function (e) {
+                    console.log(e);
+                    alert(e.message);
+                    if (e.success) {
+                        $("#frmAdd")[0].reset();    // FormAdd elemanlarını temizliyor.
+                        init();
+                    }
+                });
+            });
+
+
+            // 1) Combobaxtaki deger değiştikçe id ye ulaşma yontemi
+            $("#cmbCategory").change(function () {
+                var id = $(this).val(); // Attribute une atanan value degerini getirir.
+                //console.log($("#cmbCategory option:selected").val()); Seçilinin id sini yani value degerini veriyor.Value degerine id leri atadıgımız için.
+            });
+            init();
+        });
+    </script>
+}
+

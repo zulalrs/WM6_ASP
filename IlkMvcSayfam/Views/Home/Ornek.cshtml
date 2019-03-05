@@ -1,0 +1,33 @@
+﻿
+@model List<Kisi>
+@{
+    ViewBag.Title = "Ornek";
+}
+
+<!-- Bu sayfaya gelen model, kişi tipinde bir liste diyerek onu buraya tanımladık. Controllerdan gönderdiğimiz modeli burada muhakkak tanımlamalıyız.-->
+
+<table class="table table-responsive table-striped">
+    <!--table-striped: Zebra style-->
+    <thead> <!--Başlık kısmı-->
+        <tr>    <!--Satır oluşturmaya yarıyor-->
+            <th>#</th>  <!--Sutun oluştrumaya yarıyor.Başlık gibi(TableHeader)-->
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Detail</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Count; i++)  // Model List<Kisi> yi temsil ediyor.@ ile razor ın çalışmasını sağlanıyor.Böylece html kodları arasında c# kodları yazabiliyoruz. Bu dongu listemizde bulunan kisi kadar dönecek ve her bir propertysi aşagıda tablodaki denk gelen sutunlara yazılacak
+        {
+            var current = Model[i];
+            <tr>
+                <th>@(i+1)</th>
+                <td>@current.Name</td>  <!--Sutun yazmmaya yarıyor-->
+                <td>@current.Surname</td>
+                <td><a href="@Url.Action("Detail","Home",new { id=current.Id})" class="btn btn-success">Detail</a></td><!--Url oluşturmak için Url.Action helper ı kullanıyoruz.Action adını, hangi controller da oldugunu ve route value sunu yazdık.Route value adres cubuguna gönderdiğimiz parametre.Şuan Route value nun calışma sistemi:Controller/Action/Id->Home/Detail/Idmiz şeklinde.Ama biz Id yerine başka birsey yazarsak bu sistemde olmayacak ve adres cubugunda ? ve & karakterleri de yer alacak.Onun için sistemdeki id ye currentımızın id sini atadık.-->
+            </tr>
+        }
+    </tbody>
+</table>
+
+

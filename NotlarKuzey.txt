@@ -1,0 +1,21 @@
+Konular: AutoMapper
+
+*** Her defasýnda entityden viewmodel e , viewmodel den entity e cevirmek ve gerekli atamalarý teker teker yapmak yerine automapper ile eþleþtirmelerin otomatik yapýlmasýný saðlayabiliriz.
+
+1) Projelerimizi açtýk.
+2) Tüm projelere entityframework kurduk.
+3) Referanslarý ayarladýk.
+4) Model projesi içerisine Entities ve ViewModels klasorlerýný ekledik.
+5) Entities klasorune Ado.entity item ýný ekledik ve oradan sondaki secenegi sectik. Sql serverýmýza baðlanýp oradaki hazýr norhtwind database ini reverse engine ile kullanmýþ olduk. Yani hazýr datayý codefirste cevirme iþlemini yaptýk.
+6) DAl projesi içerisinde MyContext sýnýfý açarak entities içerisinde yer alan mycontext sýnýfýnýn içindeki verileri oraya kopyaladýk. Entitiesten de mycontext sýnýfýný sildik.
+7) Modeldeki Appconfig içerisinde yer alan connectionstrings i Web deki Webconfig içerisine yapýþtýrdýk.
+8) Repositorylerimizi yazdýk.
+9) Web projesine 
+-> install-package automapper paketini kurduk.
+10) ViewModel classlarýmýzý oluþturduk.
+11) App_Start klasoru içerisine AutoMapperConfig classý ekledik.
+
+*** Uygulama ayar dosyalarýmýzý App_Start klasoru içerisinde yapýyoruz.
+12) Global.asax içerisine automapperconfig.registermapping metodunu ekliyoruz.
+13) CategoryControllerýný oluþturduk.
+14) ProductControllerýný oluþturduk.
