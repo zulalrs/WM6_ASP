@@ -9,7 +9,7 @@ namespace Rabbit.BLL.RabbitMq
 {
     public class RabbitMqService
     {
-        private readonly string _hostName = "Wissen",
+        private readonly string _hostName = "localhost",
             _userName = "zulal",
             _password = "123456";
 

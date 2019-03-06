@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Rabbit.BLL.RabbitMq;
+using Rabbit.BLL.Repository;
 using Rabbit.Models.Entities;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -31,10 +32,25 @@ namespace Rabbit.Consumer
                 if (queueName == "MailLog")
                 {
                     var data = JsonConvert.DeserializeObject<List<MailLog>>(message);
+                    Form1.logMailLog++;
                 }
                 else if(queueName=="Customer")
                 {
-                    var data = JsonConvert.DeserializeObject<List<MailLog>>(message);
+                    var data = JsonConvert.DeserializeObject<List<Customer>>(message);
+                    var repo = new CustomerRepo();
+                    foreach (var item in data)
+                    {
+                        Form1.logMailLog++;
+                        repo.Insert(new Customer() {
+                            Address=item.Address,
+                            Email=item.Email,
+                            Id=item.Id,
+                            Name=item.Name,
+                            Surname=item.Surname,
+                            Phone=item.Phone,
+                            RegisterDate=item.RegisterDate
+                        });
+                    }
                 }
             };
             channel.BasicConsume(queueName, true, ConsumerEvent);
