@@ -63,6 +63,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ders9", "Ders9", "{5C281FA9-4B71-4B52-8ECB-188272A81E52}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RabbitMQ", "RabbitMQ", "{F4B4441C-5EBC-49CB-A71C-7ECB3C3E867C}"
+	ProjectSection(SolutionItems) = preProject
+		RabbitMqNotları.txt = RabbitMqNotları.txt
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rabbit.Web.Mvc", "Rabbit.Web.Mvc\Rabbit.Web.Mvc.csproj", "{B4FA0AA6-9CB5-4173-B435-2C9BFB2E82C1}"
 EndProject

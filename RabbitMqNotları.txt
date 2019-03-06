@@ -1,0 +1,11 @@
+RabbitMQ Kurulum Adýmlarý
+1) Öncelikle erlang kaynaðýný yüklememiz gerekmektedir.
+-> http://www.erlang.org/downloads
+2) Erlang dilinin kurulumundan sonra RabbitMQ kurulumunu yapmalýyýz. 
+-> https://www.rabbitmq.com/install-windows.html
+3) RabbitMq kurulumundan sonra RabbitMQ Command Prompt u yönetici olarak çalýþtýrmalýyýz ve 
+	rabbitmq-plugins enable rabbitmq_management kodunu yazmalýyýz.
+4) RabbitMq service startý çalýþtýrmalýyýz.
+5) Ortam deðiþkenlerini açtýktan sonra açýlan pencerede aþaðýda ve yukarýda bulunan Yeni butonuna basarak yeni bir ortam deðiþkeni oluþturacaðýz. Bu ortam deðiþkeninin deðiþken adý: “RABBITMQ_NODENAME” girerken deðiþken deðerini ise: “BÝLGÝSAYARINIZIN ADINI” girmemiz gerekmektedir.
+6) Sonrasýnda http://localhost:15672 adresine gidip oradaki kullanýcý adý ve þifre kýsmýna guest yazmalýyýz.
+7) Giriþ yaptýktan sonra admin sekmesinden user a týklayýp add user diyip yeni bir kullanýcý oluþturmalýyýz. username ve passwordu yazdýktan sonra tag kýsmý için hemen aþaðýsýndaki admin i seçmeliyiz. Sonrasýnda oluþturdugumuz kullanýcýya týklayýp ilk set permissionda da týklayýp virtual host almalýyýz.

@@ -9,7 +9,7 @@ namespace Rabbit.BLL.RabbitMq
 {
     public class RabbitMqService
     {
-        private readonly string _hostName = "localhost",
+        private readonly string _hostName = "melike",
             _userName = "zulal",
             _password = "123456";
 
@@ -17,7 +17,8 @@ namespace Rabbit.BLL.RabbitMq
         {
             ConnectionFactory connectionFactory = new ConnectionFactory
             {
-                HostName= _hostName,
+                // RabbitMQ'nun bağlantı kuracağı host'u tanımlıyoruz. Herhangi bir güvenlik önlemi koymak istersek, Management ekranından password adımlarını tanımlayıp factory içerisindeki "UserName" ve "Password" property'lerini set etmemiz yeterlidir.
+                HostName = _hostName,
                 VirtualHost="/",
                 UserName= _userName,
                 Password=_password,

@@ -16,14 +16,14 @@ namespace Rabbit.Consumer
     {
         private readonly RabbitMqService _rabbitMqService;
         public EventingBasicConsumer ConsumerEvent;
-
+        public Form1 Form { get; set; }
         public Consumer(string queueName)
         {
             _rabbitMqService = new RabbitMqService();
             var connection = _rabbitMqService.GetRabbitMqConnection();
             var channel = connection.CreateModel();
             ConsumerEvent = new EventingBasicConsumer(channel);
-
+            // Received event'i sürekli listen modunda olacaktır.
             ConsumerEvent.Received += (model, ea) =>
             {
                 var body = ea.Body;
@@ -31,26 +31,41 @@ namespace Rabbit.Consumer
 
                 if (queueName == "MailLog")
                 {
-                    var data = JsonConvert.DeserializeObject<List<MailLog>>(message);
+                    var data = JsonConvert.DeserializeObject<MailLog>(message);
+                    //işlemler
+                    new MailLogRepo().Insert(new MailLog()
+                    {
+                        Id = data.Id,
+                        CustomerId = data.CustomerId,
+                        Message = data.Message,
+                        Subject = data.Subject
+                    });
                     Form1.logMailLog++;
+                    Form.Text = $"Customer {Form1.logCustomer} - MailLog {Form1.logMailLog}";
                 }
                 else if(queueName=="Customer")
                 {
                     var data = JsonConvert.DeserializeObject<List<Customer>>(message);
                     var repo = new CustomerRepo();
-                    foreach (var item in data)
+                    for (var i = 0; i < data.Count; i++)
                     {
-                        Form1.logMailLog++;
-                        repo.Insert(new Customer() {
-                            Address=item.Address,
-                            Email=item.Email,
-                            Id=item.Id,
-                            Name=item.Name,
-                            Surname=item.Surname,
-                            Phone=item.Phone,
-                            RegisterDate=item.RegisterDate
+                        var item = data[i];
+                        Form1.logCustomer++;
+                        Form.Text = $"Customer {Form1.logCustomer} - MailLog {Form1.logMailLog}";
+                        repo.InsertForMark(new Customer()
+                        {
+                            Address = item.Address,
+                            Email = item.Email,
+                            Id = item.Id,
+                            Name = item.Name,
+                            Phone = item.Phone,
+                            Surname = item.Surname,
+                            RegisterDate = item.RegisterDate
                         });
+                        if (i % 100 == 0)
+                            repo.Save();
                     }
+                    repo.Save();
                 }
             };
             channel.BasicConsume(queueName, true, ConsumerEvent);
