@@ -77,6 +77,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rabbit.DAL", "Rabbit.DAL\Ra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rabbit.Models", "Rabbit.Models\Rabbit.Models.csproj", "{4BA16F39-D466-42D1-9488-15623F52BB52}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRApp", "SignalRApp\SignalRApp.csproj", "{C3476108-5111-41AA-9ACB-39A92F9D8A4E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -151,6 +153,10 @@ Global
 		{4BA16F39-D466-42D1-9488-15623F52BB52}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4BA16F39-D466-42D1-9488-15623F52BB52}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4BA16F39-D466-42D1-9488-15623F52BB52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3476108-5111-41AA-9ACB-39A92F9D8A4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3476108-5111-41AA-9ACB-39A92F9D8A4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3476108-5111-41AA-9ACB-39A92F9D8A4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3476108-5111-41AA-9ACB-39A92F9D8A4E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -176,6 +182,7 @@ Global
 		{87C8E408-3964-4AE0-BAEF-7378DC9803E5} = {F4B4441C-5EBC-49CB-A71C-7ECB3C3E867C}
 		{B4A7E779-BC65-496D-89BC-B18E368F2D3E} = {F4B4441C-5EBC-49CB-A71C-7ECB3C3E867C}
 		{4BA16F39-D466-42D1-9488-15623F52BB52} = {F4B4441C-5EBC-49CB-A71C-7ECB3C3E867C}
+		{C3476108-5111-41AA-9ACB-39A92F9D8A4E} = {68F0C6EA-223F-44EF-9449-D02FD7DBD8B5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {581973EF-3815-45DD-91BA-AFF6B8E8A2F4}

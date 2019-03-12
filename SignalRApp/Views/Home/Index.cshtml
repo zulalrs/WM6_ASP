@@ -1,0 +1,92 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>ASP.NET SignalR Sohbete Hoşgeldiniz</h1>
+    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
+</div>
+
+<div class="row">
+    <div class="col-md-12" id="logindiv">
+        <input type="text" id="username" placeholder="username" />
+        <input type="button" value="Login" id="btnlogin" />
+    </div>
+    <div class="col-md-6" id="chatdiv">
+        <input type="text" id="message" />
+        <input type="button" id="sendmessage" value="Send" />
+        <input type="hidden" id="displayname" /> @*Gönderen kullanıcının adı*@
+        <ul id="discussion"></ul>
+    </div>
+    <div class="col-md-6" id="onlineusers">
+        <ul id="onlinelist"></ul>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/jquery.signalR-2.2.2.js"></script>
+    <script src="~/signalr/hubs"></script>  @*Bu sanal scripti de manuel olarak eklemek zorundayız.*@
+    <script>
+        var userList = [];  // Kullanıcıları tutan liste
+        $(function () {
+            $("#logindiv").show();
+            $("#chatdiv").hide();
+            $("#btnlogin").click(function () { // Login buttonuna tıklanıldığında
+                var username = $("#username").val();  // username id sine sahip tag ın val değerini değişkene ata
+                if (username == "") return; // Eğer değer boş ise devamını çalıştırma buradan dön.
+                $("#displayname").val(username); // Değer boş değilse displayname id sine sahip tag ın val değerine username değişkeninin değerini ver.
+
+                signalRHub.server.login(username, $.connection.hub.id); // Hub nesnemizin server kısmında yani backend tarafındaki metodunu çalıştırır. Kullanıcı adı ve bağlantı idsini buradan gonderyoruz.
+
+                $("#logindiv").hide();
+                $("#chatdiv").show();
+            });
+
+            var signalRHub = $.connection.chatHub; // Hub nesnemizi burada tanımladık. chatHub bizim Hub classımızın ismi ama burada baş harfini küçük yazmalıyız.
+            var conId = null;
+            $.connection.hub.start().done(function () { //signalR la bağlantıyı kur ve sonra
+                conId = $.connection.hub.id; // Bağlantı id si. Yani sayfa açıldığında üretilen id. Her yeni sayfada farklı id olacak.
+                console.log(conId);
+                $("#sendmessage").click(function () { // Send buttonuna tıklandığında aşağıdaki kod satırı çalışacak.
+                    signalRHub.server.herkeseGonder($("#displayname").val(), $("#message").val()); // Hub nesnemizin server kısmında yani backend tarafındaki metodunu çalıştırır. Buradan gonderirken server yazıyoruz.
+                });
+            });
+            signalRHub.client.herkeseGonder = function (gonderen, mesaj, tarih) { // Metoddan gelen veriyi alırkende client kullanıyoruz.
+                $("<li></li>").html("<strong>" + gonderen + "</strong>: " + mesaj + "<i>" + tarih + "</i>")
+                    .appendTo("#discussion");   // Bir li oluşturduk, onun içine gelen verileri yazdırdık ve discussion içirisine ekledik.
+            };
+
+            signalRHub.client.users = function (users) {
+                $("#onlinelist").empty(); // Listeyi temizleme işlemi
+                userList = users; // Backedden gelen user listesini buradaki userList e ekliyoruz. 
+                $.each(users, function (key, item) {    // users içindeki her bir elemanı geziyoruz.
+                    var li = $("<li></li>").html(item.UserName); // li tagı oluşturduk ve içine username i yazdırdık.
+                    // Bir input tagı oluşturduk ve type özelliğine button verdik. Value özelliğini verdik. Name özelliğine de id atadık.
+                    $("<input />").attr("type", "button")
+                        .attr("value", "Özel Mesaj Gönder")
+                        .attr("name", item.Id)
+                        .on("click", function () {  // Bu buttona tıklandığında 
+                            var aliciId = this.name; // Name indeki değeri buradaki değişkene ver
+                            var ozelMesaj = prompt("Lütfen Mesajınızı Giriniz"); // prompt komutu ekrana küçük diyalog penceresi açar. Açılan ekrandan girilen mesajı buradaki değişkene atadık
+                            signalRHub.server.ozelMesaj(conId, aliciId, ozelMesaj); // Backenddeki ozelMesaj metodunu çaıştırdık.
+                        })
+                        .appendTo($(li)); // input tagını li tagına ekle
+                    li.attr("name", item.Id).appendTo("#onlinelist"); // li tagına name özelliğ ver ve değerini item ın id sinden alsın. li tagını da onlinelist idsine sahip ul ye ekle.
+                });
+            }
+
+            signalRHub.client.mesajGeldi = function (gonderenId, mesaj) {
+                var gonderen = null;
+                for (var i = 0; i < userList.length; i++) { // Gondereni bulmak için bir dongu kullandık.
+                    if (userList[i].Id == gonderenId) {
+                        gonderen = userList[i];
+                        break;
+                    }
+                }
+                alert(gonderen.UserName + ": " + mesaj); // alert ile kullanıcıya mesajı ve kimden geldiğini gösterdik.
+            }
+        });
+
+    </script>
+
+}

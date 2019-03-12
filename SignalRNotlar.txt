@@ -1,1 +1,15 @@
 ***Tarayýcý üzerinde yüzlerce kullanýcýnýn anlýk olarak hareketlerini yakalamak. Aslýnda Clientler birbiriyle haberleþmiþ oluyor. SignalR microsoftun socket teknolojisinin adý. Asýl teknoloji websocket. SignalR client tarafa bir istek gonderiyor, bir eventý tetikliyor yani backendden clienta bir istek gitmiþ oluyor. Clientta bu istek doðrultusundan sunucudan veriyi alýyor ve guncelliyor.
+
+*** Telerik: Kendo UI araç takýmý, hepsini birlikte destekleyen bir paket içinde toplanmýþ, tutarlý programlama ara yüzü, zengin JQuery tabanlý araçlar, bir MVVM çerçevesi, temalar, þablonlar ve daha fazlasýný içermektedir./ ASP.NET geliþtiricilerinin, zengin özellikli, standartlara uygun ve çapraz tarayýcý uyumlu ASP.NET web uygulamalarýný, uygun fiyatla ve zamanýnda oluþturmalarýna yardým etmek üzere tasarlanmýþ profesyonel bir araç takýmýdýr.
+
+1) Web Application + MVC + WEB Api seçerek bir proje oluþturduk.
+2) Projeye sað týklayýp Add + New Item + SignalR Hub Class ý ekledik (Adý: ChatHub)
+3) App_Start klasoru içerisine Add + NewItem + Owin Startup Class ekledik. (Adý: Startup) ve içerisinde deðiþiklik yaptýk.
+4) Chathub classýna HerkeseGonder metodunu ekledik.
+5) Home Index viewýnda deðiþiklikler yaptýk.
+6) Özel mesaj gonderimi için ChatHub classý içerisine ÖzelMesaj ve Login metodlarýný yazdýk. Ayrýca OnConnected ve OnDisconnected metodlarýný override ettik.
+7) Home Index viewýna eklemeler yaptýk.
+8) Mesajlarýn gözükebilmesi için run düðmesi altýndaki script debugging i disabled yapmalýyýz.
+
+** Ýki ana mekanizmamýz var biri Hub classý diðeri ise client. Index viewýndan Hub class a, Hub classtan da Index viewýna veri aktarýmý saðlayacaðýmýz bir tasarým yapmalýyýz.
+*** ChatHub sýnýfý içerisinde override edebileceðimiz metodlar var. 
