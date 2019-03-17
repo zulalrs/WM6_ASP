@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html>
+<html ng-app="myApp">   <!--Angular modulu buraya ekledik.-->
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +7,10 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
+    <!--DevExpress ile ilgili csss dosyas ve seçtiğimiz tema linkini ekledik.-->
+    <link href="~/Content/dx.common.css" rel="stylesheet" />
+    <link href="~/Content/dx.material.orange.light.css" rel="stylesheet" />
+    <!--Bitiş-->
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -39,6 +43,12 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    <!--Devexpress js dosyalrı Başlangıç-->
+    <script src="~/Scripts/angular.js"></script>
+    <script src="~/Scripts/jszip.js"></script>
+    <script src="~/Scripts/dx.all.js"></script>
+    <script src="~/Scripts/app.js"></script>
+    <!--Devexpress js dosyalrı Bitiş-->
     @RenderSection("scripts", required: false)
 </body>
 </html>

@@ -1,12 +1,20 @@
 -DevExtreme-
 
-1) Asp.net Web application Mvc+Mvc+Api, change den de indivudial seçiyoruz.
+1) Asp.net Web application Mvc+Mvc+Api, change den de indivudial seçerek yeni bir proje açtýk.
 2) Install-Package DevExtreme.Web kurulumunu yaptýk.
 3) Install-Package AngularJs.Core kurulumunu yaptýk.
-4) Script içerisine javascript file(app.js)
-5) Layout içerisine scripts bootsrap altýna angular,dx.all,app js dosyalarýný sürükle býrak ile eklemekiyiz.
-6) layout içindeki head içine scriptlerin altýna common css ve material designdan sectiðimiz bir css linki ekledik.(Content altýnda)
-7) Install-Package fakedata
+4) Script klasorü içerisine javascript file(app.js) ekledik.
+5) Layout içerisinde en altta yer alan  @Scripts.Render("~/bundles/bootstrap") altýna sýrasýyla angular.js, jszip.js, dx.all.js,app.js dosyalarýný sürükle býrak ile ekledik.
+
+** Content klasorü içerisine devexpress ile ilgili temalar geldi.
+
+6) Layout içindeki head içine scriptlerin altýna common css ve material designdan sectiðimiz bir css linki ekledik.(Content altýnda). Ayrýca html etiketine ng-app i ekledik.
+7) App.js içerisine eklemeler yaptýk.
+8) Models klasorü içerisine ApplicationDbContext adýnda bir sýnýf ekledik ve o klasor içerisindeki IdentityModels sýnýfýnda yer alan ApplicationDbContext sýnýfýný kes koplaya ile yeni oluþturduðumuz sýnýf içerisine yapýþtýrdýk.
+9) Models klasoru içerisine Customer adýnda yeni bir class ekledik ve içerisini propertyler ile doldurduk.
+10) ApplicationDbContext içerisine poco classýmýzý(Customer) tanýmladýk.
+11) Install-Package fakedata kurulumunu yaptýk.
+12) HomeController içerisindeki Aboutactionýnda deðiþiklikler yaptýk. 
 
 ***DTO(Data Transfer Object): Bu objeler katmanlar, birimler arasýnda sadece veri aktarýmý için kullanýlýrlar. (Bizim kullandýðýmmýz viewmodel sýnýflarý)
 	-Depolama dýþýnda herhangi bir yükümlülükleri yoktur.
