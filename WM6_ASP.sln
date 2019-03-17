@@ -59,6 +59,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ders7", "Ders7", "{68F0C6EA
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ders8", "Ders8", "{F37DFBFB-2014-4995-9D97-B0F23DDF2059}"
+	ProjectSection(SolutionItems) = preProject
+		DevexOdataNotlar.txt = DevexOdataNotlar.txt
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ders9", "Ders9", "{5C281FA9-4B71-4B52-8ECB-188272A81E52}"
 EndProject
@@ -78,6 +81,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rabbit.Models", "Rabbit.Models\Rabbit.Models.csproj", "{4BA16F39-D466-42D1-9488-15623F52BB52}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRApp", "SignalRApp\SignalRApp.csproj", "{C3476108-5111-41AA-9ACB-39A92F9D8A4E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevexOdata", "DevexOdata\DevexOdata.csproj", "{E979A5EC-C79E-4156-AB7E-2A36F7EE2E87}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -157,6 +162,10 @@ Global
 		{C3476108-5111-41AA-9ACB-39A92F9D8A4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3476108-5111-41AA-9ACB-39A92F9D8A4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C3476108-5111-41AA-9ACB-39A92F9D8A4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E979A5EC-C79E-4156-AB7E-2A36F7EE2E87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E979A5EC-C79E-4156-AB7E-2A36F7EE2E87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E979A5EC-C79E-4156-AB7E-2A36F7EE2E87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E979A5EC-C79E-4156-AB7E-2A36F7EE2E87}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -183,6 +192,7 @@ Global
 		{B4A7E779-BC65-496D-89BC-B18E368F2D3E} = {F4B4441C-5EBC-49CB-A71C-7ECB3C3E867C}
 		{4BA16F39-D466-42D1-9488-15623F52BB52} = {F4B4441C-5EBC-49CB-A71C-7ECB3C3E867C}
 		{C3476108-5111-41AA-9ACB-39A92F9D8A4E} = {68F0C6EA-223F-44EF-9449-D02FD7DBD8B5}
+		{E979A5EC-C79E-4156-AB7E-2A36F7EE2E87} = {F37DFBFB-2014-4995-9D97-B0F23DDF2059}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {581973EF-3815-45DD-91BA-AFF6B8E8A2F4}

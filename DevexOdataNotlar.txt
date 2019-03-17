@@ -1,0 +1,13 @@
+-DevExtreme-
+
+1) Asp.net Web application Mvc+Mvc+Api, change den de indivudial seçiyoruz.
+2) Install-Package DevExtreme.Web kurulumunu yaptýk.
+3) Install-Package AngularJs.Core kurulumunu yaptýk.
+4) Script içerisine javascript file(app.js)
+5) Layout içerisine scripts bootsrap altýna angular,dx.all,app js dosyalarýný sürükle býrak ile eklemekiyiz.
+6) layout içindeki head içine scriptlerin altýna common css ve material designdan sectiðimiz bir css linki ekledik.(Content altýnda)
+7) Install-Package fakedata
+
+***DTO(Data Transfer Object): Bu objeler katmanlar, birimler arasýnda sadece veri aktarýmý için kullanýlýrlar. (Bizim kullandýðýmmýz viewmodel sýnýflarý)
+	-Depolama dýþýnda herhangi bir yükümlülükleri yoktur.
+	-Setter/getter kullanmýna gerek yoktur. Tüm veriler public olarak tutulabilir.
