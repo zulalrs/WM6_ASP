@@ -10,12 +10,28 @@
 
 6) Layout içindeki head içine scriptlerin altýna common css ve material designdan sectiðimiz bir css linki ekledik.(Content altýnda). Ayrýca html etiketine ng-app i ekledik.
 7) App.js içerisine eklemeler yaptýk.
+	-https://js.devexpress.com/Demos/WidgetsGallery/Demo/DataGrid/SimpleArray/AngularJS/Light/    -> DataBinding altýndaki simple array grid ini kullandýk ve ilk aþama için oradaki hazýr datayý kopyaladýk.
 8) Models klasorü içerisine ApplicationDbContext adýnda bir sýnýf ekledik ve o klasor içerisindeki IdentityModels sýnýfýnda yer alan ApplicationDbContext sýnýfýný kes koplaya ile yeni oluþturduðumuz sýnýf içerisine yapýþtýrdýk.
 9) Models klasoru içerisine Customer adýnda yeni bir class ekledik ve içerisini propertyler ile doldurduk.
 10) ApplicationDbContext içerisine poco classýmýzý(Customer) tanýmladýk.
 11) Install-Package fakedata kurulumunu yaptýk.
-12) HomeController içerisindeki Aboutactionýnda deðiþiklikler yaptýk. 
+12) HomeController içerisindeki About actionýnda fake data ile veri atama iþlemi yaptýk.
+--Api
+13)  Controller içerisine WebApi klasorü açtýk ve o klasor içinde yeni bir customercontroller oluþturduk. Controller seçeneklerinden api empty olaný seçtik ve oluþan controller sýnýfý içerisinde getall fonksiyonu tanýmladýk.
+14) App.js içerisine api ile ilgili kodlarý ekledik.
+--Odata
+15) WebApi klasorü içerisine customerodatacontroller oluþturduk. Controller seçeneklerinden v3 odata with entity framework olaný seçtik. Karþýmýza gelen ekraný gerekli verilerle doldurduk.
+16) Yüklemeden sonra yeni oluþan controllerda yorum satýrý içerisinde yapýlmasý gereken deðiþiklikleri AppStart içerisindeki WebApiConfig classýna ekliyoruz.
+17) Verilere ulaþmak için CustomerOdataController classýndaki routelarý url ye yazmamýz yeterli
+18) App.js içerisine verileri tabloda görmek için gerekli kodlarý ekliyoruz.
+	
+
+*** Odata servis yapabilmemiz için bizim veriyi getiren bir odata servisine ihtiyacýmýz var.
 
 ***DTO(Data Transfer Object): Bu objeler katmanlar, birimler arasýnda sadece veri aktarýmý için kullanýlýrlar. (Bizim kullandýðýmmýz viewmodel sýnýflarý)
 	-Depolama dýþýnda herhangi bir yükümlülükleri yoktur.
 	-Setter/getter kullanmýna gerek yoktur. Tüm veriler public olarak tutulabilir.
+
+***CPRS: ?
+
+-----Tamamlandý-----

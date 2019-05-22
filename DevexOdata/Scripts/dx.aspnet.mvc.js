@@ -1,7 +1,7 @@
 /*!
 * DevExtreme (dx.aspnet.mvc.js)
-* Version: 18.2.7
-* Build date: Sat Mar 09 2019
+* Version: 18.2.6
+* Build date: Tue Feb 05 2019
 *
 * Copyright (c) 2012 - 2019 Developer Express Inc. ALL RIGHTS RESERVED
 * Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
@@ -19,7 +19,8 @@
     var templateCompiler = createTemplateCompiler();
 
     function createTemplateCompiler() {
-        var OPEN_TAG = "<%",CLOSE_TAG="%>",
+        var OPEN_TAG = "<%",
+            CLOSE_TAG = "%>",
             ENCODE_QUALIFIER = "-",
             INTERPOLATE_QUALIFIER = "=";
 

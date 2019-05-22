@@ -2,16 +2,163 @@
 // 1)
 var app = angular.module("myApp", ["dx"]); // Angular module tanımladık ve adına myApp verdik. DevExpress kullanacağımız için köşeli parantez içerisine dx yazarak dependency injection(Bağımlılıkların yüklenmesi) kullanmış olduk. dx bağımlılığını yüklemiş olduk. İçerde istediğimiz yerde bunu tekrar tanımlamaya gerek kalmadan kullanabiliriz.
 
+var host = 'http://localhost:51911/';
+
 // 2)
 app.controller("testCtrl", function ($scope) { // Bir controller oluşturduk. View tarafındaki herşey scope içerisine kaydedilecek.
-
+    console.log($scope)
     // 3) Test için
-    $scope.dataGridOptions = {  // Grid in tüm özelliklerini bunun içerisine yazıyoruz. Temelde iki tane property yeterli bir tablonun oluşması için (dataSource ve columns) -- Bu veriler About viewi içerisinde gösterilecek.
+    $scope.dataGridOptions = {  // Grid in tüm özelliklerini bunun içerisine yazıyoruz. Temelde iki tane property yeterli bir tablonun oluşması için (dataSource ve columns) -- Bu veriler Contact viewi içerisinde gösterilecek.
         dataSource: customers,  // Kullanacağımız data
         columns: ["CompanyName", "City", "State", "Phone", "Fax"],  // Sütunlar
-        showBorders: true // Kenarlıkların gosterimi
+        showBorders: true, // Kenarlıkların gosterimi
+        searchPanel: {
+            visible: true
+        },
+        paging: {
+            pageSize: 5,
+        }
     };
 });
+
+// 5) Odata için
+app.controller("customCtrl", function ($scope,$http) {
+    $scope.data = null;
+    function init() {
+        // 4) api için
+        /*
+        $http({
+            url: host + 'api/customer/getall',
+            method: 'GET'
+        }).then(function (ev) {
+            if (ev.data.success) {
+                $scope.data = ev.data.data;
+                console.log($scope.data)
+                loadGrid();
+            }
+        });
+        */
+        loadGrid();
+    }
+    function loadGrid() {
+        console.log($scope)
+        // 4) Api için
+        /*
+        $scope.dataGridOptions = {
+            dataSource: host + 'api/customer/getall', --> Burada neden $scope.data yazınca verileri göremedik.????  
+            columns: ["Id","Name", "Surname", "Phone"], 
+            showBorders: true, 
+        };
+        */
+
+        // 5) Odata için
+        $scope.dataGridOptions = {
+            //keyExpr:"Id",
+            dataSource: {
+                store: {
+                    type: "odata",
+                    url: '/odata/CustomersOdata',
+                    key:"Id"
+                }
+            },
+            editing: {
+                mode: "row",
+                allowUpdating: true,
+                allowDeleting: true,
+                allowAdding: true
+            },
+            selection: {
+                mode: "multiple"
+            },
+            onSelectionChanged: function (selected) {
+                $scope.selected = selected.selectedRowsData;
+            },
+            "export": {
+                enabled: true,
+                fileName: "Customers_" + parseInt(Math.random() * 100000),
+                allowExportSelectedData: true
+            },
+            columnChooser: {
+                enabled: true,
+                allowSearch: true
+            },
+            groupPanel: {
+                visible: true
+            },
+            filterRow: {
+                visible: true
+            },
+            headerFilter: {
+                visible: true
+            },
+            onRowUpdating: function (e) {   // Edit leme işleminin gerçekleşmesini sağlıyor. e nin içinde newdata ve olddata var. O propertyleri seçerek gerekli düzenlemeleri yapabiliyoruz.
+                console.log("RowUpdating");
+                for (var propertyName in e.newData) {
+                    if (e.newData.hasOwnProperty(propertyName)) {
+                        console.log(propertyName);
+                        e.oldData[propertyName] = e.newData[propertyName];
+                    }
+                }
+                e.newData = e.oldData;
+                console.log(e);
+            },
+            columns: [
+                {
+                    dataField: "Id",
+                    caption: "Müşteri No",
+                    visible: false
+                }, {
+                    dataField: "Name",
+                    groupIndex: 0
+                }, "Surname", "Phone", {
+                    dataField: "Address",
+                    allowHeaderFiltering: false
+                },
+                {
+                    dataField: "Balance",
+                    caption: "Balance",
+                    dataType: "number",
+                    format: "#,##0.## ₺"
+                }],
+            showBorders: true,
+            paging: {
+                pageSize: 10
+            },
+            pager: {    // Tablonun bir sayfasında kac veri göstereceğini seçme 
+                showPageSizeSelector: true,
+                allowedPageSizes: [5, 10, 20],
+                showInfo: true
+            },
+            searchPanel: {
+                visible: true,
+                width: 240,
+                placeholder: "Ara..."
+            },
+            summary: {
+                //totalItems: [{
+                //    column: "Balance",
+                //    summaryType: "sum",
+                //    valueFormat: "#,##0.## ₺"
+                //}],
+                //groupItems: [
+                //    {
+                //        column: "Name",
+                //        summaryType: "count",
+                //        displayFormat: "Toplam: {0}"
+                //    },
+                //    {
+                //        column: "Balance",
+                //        summaryType: "avg",
+                //        displayFormat: "Ortalama: {0}",
+                //        alignByColumn: true,
+                //        valueFormat: "#,##0.## ₺"
+                //    }]
+            }
+        }
+    }
+    init();
+});
+
 
 // 3) Test için
 var customers = [{
